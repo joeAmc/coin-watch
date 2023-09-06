@@ -1,9 +1,3 @@
-# dotenv environment variables file
-.env
-
-# mongoDB uri
-config.js
-
 # dependencies
 node_modules
 .pnp
