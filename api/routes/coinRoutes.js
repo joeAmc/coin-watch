@@ -1,5 +1,5 @@
 const express = require("express");
-const Coin = require("../models/Coins");
+const Coin = require("../models/Coin");
 const router = express.Router();
 
 router.post("/coin/new", async (req, res) => {
@@ -20,4 +20,9 @@ router.post("/coin/new", async (req, res) => {
     console.error(`Failed to create coin: ${error}`);
     res.status(500).json({ message: "Failed to add coin" });
   }
+});
+
+router.get("/coins", async (req, res) => {
+  const coins = await Coin.find();
+  res.json(coins);
 });
