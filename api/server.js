@@ -5,7 +5,6 @@ const User = require("./models/User");
 const cors = require("cors");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -27,13 +26,14 @@ mongoose
   .catch((err) => console.log(err));
 
 app.post("/coin/new", async (req, res) => {
-  const userId = req.user._id;
+  // const userId = req.user._id;
+  const userId = "64fe34f8ab51f404081a1b6a";
 
   const coin = new Coin({
     name: req.body.name,
     ticker: req.body.ticker,
-    user: userId,
     amount: req.body.amount,
+    user_id: userId,
   });
 
   try {
@@ -46,29 +46,23 @@ app.post("/coin/new", async (req, res) => {
   }
 });
 
-app.post("/coin/new", async (req, res) => {
-  const userId = req.user._id;
-
-  const coin = new Coin({
-    name: req.body.name,
-    ticker: req.body.ticker,
-    user: userId,
-    amount: req.body.amount,
-  });
+app.get("/coins/:userId", async (req, res) => {
+  const userId = req.params.userId;
 
   try {
-    await coin.save();
-    res.status(201).json(coin);
-    console.log("coin successfully sent");
-  } catch (error) {
-    console.error(`Failed to create coin: ${error}`);
-    res.status(500).json({ message: "Failed to add coin" });
-  }
-});
+    // Query the database to find all coins associated with the user
+    const coins = await Coin.find({ user_id: userId });
 
-app.get("/coins", async (req, res) => {
-  const coins = await Coin.find();
-  res.json(coins);
+    // Check if the user has any coins
+    if (!coins || coins.length === 0) {
+      return res.status(404).json({ message: "No coins found for this user" });
+    }
+
+    res.json(coins);
+  } catch (error) {
+    console.error(`Failed to fetch coins: ${error}`);
+    res.status(500).json({ message: "Failed to fetch coins" });
+  }
 });
 
 app.delete("/coin/delete/:id", async (req, res) => {
@@ -77,11 +71,31 @@ app.delete("/coin/delete/:id", async (req, res) => {
   res.json(result);
 });
 
-// const coinRoutes = require("./routes/coinRoutes");
-// const userRoutes = require("./routes/userRoutes");
+app.put("/coin/update/:coinId", async (req, res) => {
+  const coinId = req.params.coinId;
+  const newAmount = req.body.amount;
 
-// app.use("/coins", coinRoutes);
-// app.use("/users", userRoutes);
+  try {
+    // Find the coin by its ID
+    const coin = await Coin.findById(coinId);
+
+    // Check if the coin exists
+    if (!coin) {
+      return res.status(404).json({ message: "Coin not found" });
+    }
+
+    // Update the coin's amount
+    coin.amount = newAmount;
+
+    // Save the updated coin
+    await coin.save();
+
+    res.json(coin);
+  } catch (error) {
+    console.error(`Failed to update coin amount: ${error}`);
+    res.status(500).json({ message: "Failed to update coin amount" });
+  }
+});
 
 app.post("/signup", async (req, res) => {
   const { email, password } = req.body;

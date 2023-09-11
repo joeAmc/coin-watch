@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  coins: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Coin",
+  },
 });
 
 const User = mongoose.model("User", userSchema);
