@@ -2,3 +2,8 @@
 node_modules
 .pnp
 .pnp.js
+
+# env variables
+.env.development.local
+.env.test.local
+.env.production.local
