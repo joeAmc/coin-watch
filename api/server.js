@@ -30,9 +30,9 @@ app.post("/coin/new", async (req, res) => {
   const userId = "64fe34f8ab51f404081a1b6a";
 
   const coin = new Coin({
-    name: req.body.name,
     ticker: req.body.ticker,
     amount: req.body.amount,
+    name: req.body.name,
     user_id: userId,
   });
 
@@ -126,6 +126,25 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     console.error(`Failed to log in user: ${error}`);
     res.status(500).json({ message: "Failed to log in user" });
+  }
+});
+
+app.post("/check-user", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const existingUser = await User.findOne({
+      $or: [{ email }],
+    });
+
+    if (existingUser) {
+      return res.json({ exists: true });
+    }
+
+    res.json({ exists: false });
+  } catch (error) {
+    console.error(`Failed to check user: ${error}`);
+    res.status(500).json({ message: "Failed to check user" });
   }
 });
 

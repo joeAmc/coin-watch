@@ -1,0 +1,28 @@
+.navbar {
+  height: 100px;
+  background-color: var(--dark-alt);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: -webkit-fill-available;
+  z-index: 1;
+  padding: 20px 32px;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.nav-icon {
+  font-size: 50px;
+  color: var(--light-alt);
+  cursor: pointer;
+  display: flex;
+}
+
+.nav-icon.active {
+  color: var(--primary);
+}

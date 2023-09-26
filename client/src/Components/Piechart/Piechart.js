@@ -1,20 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 // import { Chart } from "react-google-charts";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 
 const btc = "6,030";
 
 const data = [
-  { coin: "BTC", value: 6353 },
-  { coin: "ETH", value: 3353 },
-  { coin: "ADA", value: 1653 },
+  { coin: "BTC", value: 6353, label: "BTC" },
+  { coin: "ETH", value: 3353, label: "ETH" },
+  { coin: "ADA", value: 1653, label: "ADA" },
 ];
-
-const size = {
-  width: 400,
-  height: 400,
-};
 
 export const options = {
   title: "My Cryptos",
@@ -24,13 +20,33 @@ const Piechart = () => {
   const API_SECRET = process.env.REACT_APP_API_SECRET;
   const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const [responseArray, setResponseArray] = useState([]);
+  const removeDups = [...new Set(responseArray)];
+  const [coins, setCoins] = useState([]);
+  const { userId } = useParams();
+
+  const API_URL = process.env.REACT_APP_API;
 
   console.log("responseArray", responseArray);
+  console.log("removeDups", removeDups);
 
-  // console.log("price", `$${price}`);
+  useEffect(() => {
+    getCoins();
+  }, []);
+
+  const getCoins = () => {
+    // fetch(`http://localhost:4000/coins/${userId}`);
+    fetch(`http://localhost:4000/coins/64fe34f8ab51f404081a1b6a`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("coinData", data);
+        setCoins(data);
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
 
   useEffect(() => {
     const fetchCoinData = async (coin) => {
+      // if (responseArray.forEach((item) => item.coin !== coin)) {
       try {
         const myHeaders = new Headers();
         myHeaders.append("QC-Access-Key", API_ACCESS);
@@ -52,17 +68,19 @@ const Piechart = () => {
         }
 
         const data = await response.json();
+        console.log("data", data);
 
         setResponseArray((prevResponseArray) => [
           ...prevResponseArray,
-          { coin: coin, value: data.data.coin_price * 0.32 },
+          { coin: coin, value: data.data.coin_price, label: coin },
         ]);
       } catch (error) {
         console.error(`Error fetching data for ${coin}:`, error);
       }
     };
+    // };
 
-    const coins = ["BTC"];
+    const coins = ["BTC", "ETH"];
 
     coins.forEach((coin) => {
       fetchCoinData(coin);
@@ -70,25 +88,23 @@ const Piechart = () => {
   }, []);
 
   return (
-    responseArray.length > 0 && (
-      <PieChart
-        series={[
-          {
-            arcLabel: (item) => `${item.coin} $${item.value}`,
-            arcLabelMinAngle: 45,
-            data: responseArray,
-          },
-        ]}
-        sx={{
-          [`& .${pieArcLabelClasses.root}`]: {
-            fill: "white",
-            fontWeight: "regular",
-            fontSize: 16,
-          },
-        }}
-        {...size}
-      />
-    )
+    <PieChart
+      series={[
+        {
+          arcLabel: (item) => `${item.coin}`,
+          data,
+        },
+      ]}
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fill: "white",
+          fontWeight: "regular",
+          fontSize: 16,
+        },
+      }}
+      width={400}
+      height={250}
+    />
   );
 };
 

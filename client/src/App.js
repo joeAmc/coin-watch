@@ -1,25 +1,35 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Piechart from "./Components/Piechart";
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
+import Auth from "./Pages/Auth";
+import AddCrypto from "./Pages/AddCrypto";
+import Portfoglio from "./Pages/Portfoglio";
+import UpdateCrypto from "./Pages/UpdateCrypto";
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <Piechart />
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthContext.Provider
+        value={{
+          loggedIn,
+          showAlert,
+          setLoggedIn,
+          setShowAlert,
+        }}
+      >
+        {/* <BrowserRouter> */}
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="/add" element={<AddCrypto />} />
+          <Route path="/portfoglio" element={<Portfoglio />} />
+          <Route path="/update" element={<UpdateCrypto />} />
+        </Routes>
+        {/* </BrowserRouter> */}
+      </AuthContext.Provider>
     </div>
   );
 }
