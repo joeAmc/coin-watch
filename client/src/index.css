@@ -1,13 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Roboto+Mono:wght@700&display=swap");
+
 :root {
   --primary: #6ece95;
   --secondary: #7df3b4;
+  --primary-hover: #3d6f51;
+  --secondary-hover: #4c946e;
   --light: #eee;
   --light-alt: #61759b;
   --dark: #0b1017;
   --dark-alt: #131922;
-  --box-shadow: 0 0 25px rgba(136, 252, 155, 0.35);
+  --box-shadow: 0 0 25px rgba(122, 215, 138, 0.35);
   --transition: all 400ms ease;
   --border-radius: 12px;
+  --border-radius-small: 4px;
 }
 
 * {
@@ -31,7 +36,9 @@ body {
 h1 {
   font-size: 32px;
   font-weight: 700;
-  margin-bottom: 12px;
+  display: flex;
+  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto Mono", monospace;
 }
 
 h2 {
@@ -43,7 +50,7 @@ h2 {
 h4 {
   font-size: 16px;
   font-weight: 500;
-  /* margin-bottom: 40px; */
+  display: flex;
   text-transform: uppercase;
   color: var(--light-alt);
 }
@@ -52,6 +59,7 @@ h5 {
   font-size: 16px;
   font-weight: 500;
   color: var(--light-alt);
+  display: flex;
 }
 
 button {
@@ -61,21 +69,60 @@ button {
     var(--primary),
     var(--secondary)
   );
-  color: white;
+  color: var(--dark-alt);
   border: none;
   padding: 12px;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-small);
   width: 100%;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   transition: var(--transition);
+  margin-top: 18px;
 }
 
 button:hover {
   background-color: var(--primary);
-  background-image: linear-gradient(to bottom, #cd587f, #a175f1);
+  background-image: linear-gradient(
+    to bottom,
+    var(--primary-hover),
+    var(--secondary-hover)
+  );
 }
 
 .spacer {
   height: 100px;
+}
+
+input,
+label,
+select {
+  display: flex;
+}
+
+input,
+select {
+  margin-top: 12px;
+  padding: 8px;
+  height: 38px;
+  border-radius: var(--border-radius-small);
+  background-color: var(--light-alt);
+  border: none;
+  color: white;
+  font-size: 16px;
+  width: 100%;
+}
+
+label {
+  font-size: 24px;
+}
+
+input {
+  font-size: 18px;
+}
+
+form {
+  background-color: var(--dark-alt);
+  padding: 22px;
+  box-shadow: var(--box-shadow);
+  margin-top: 50%;
 }

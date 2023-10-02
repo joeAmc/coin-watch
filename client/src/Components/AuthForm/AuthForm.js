@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useContext } from "react";
-// import "./Auth.css";
+import "./AuthForm.css";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Bars } from "react-loader-spinner";
 // import AuthAlert from "../AuthAlert/AuthAlert";
@@ -18,6 +18,7 @@ const Auth = () => {
   const [alertClass, setAlertClass] = useState("x");
   const [success, setSuccess] = useState();
   const { setLoggedIn, showAlert, setShowAlert } = useContext(AuthContext);
+  const [userId, setUserId] = useState("");
 
   const API_URL = process.env.REACT_APP_API;
 
@@ -76,7 +77,7 @@ const Auth = () => {
         setAlertMessage("Username or email already exists");
         setAlertClass("fail");
         setSuccess(false);
-        setShowAlert(true);
+        // setShowAlert(true);
         setLoading(false);
         return;
       }
@@ -99,7 +100,6 @@ const Auth = () => {
       });
 
       const json = await response.json();
-      console.log("json", json);
 
       if (response.ok) {
         if (signUp) {
@@ -111,8 +111,8 @@ const Auth = () => {
         } else {
           console.log("Logged in successfully!");
           setLoggedIn(true);
-          // navigate(`/vibes?userId=${userId}`);
         }
+        navigate(`/add/${json._id}`);
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
       } else {
         console.error("Failed to sign up or log in");
@@ -131,22 +131,13 @@ const Auth = () => {
       setSuccess(false);
     }
 
-    setShowAlert(true);
+    // setShowAlert(true);
     setLoading(false);
   };
 
   return (
     <>
       <div className="signup-container">
-        <div className="spacer" />
-        {/* {showAlert && (
-          <AuthAlert
-            text={alertMessage}
-            backgroundColor={alertClass}
-            success={success}
-            showAlert={showAlert}
-          />
-        )} */}
         {loading && (
           <>
             <div className="loader">
@@ -164,18 +155,6 @@ const Auth = () => {
           </>
         )}
         <form onSubmit={handleSubmit}>
-          {/* {signUp && (
-            <p>
-              <label htmlFor="username">User Name</label>
-              <input
-                id="username"
-                type="username"
-                name="username"
-                onChange={handleUserNameChange}
-                required
-              />
-            </p>
-          )} */}
           <p>
             <label htmlFor="email">Email</label>
             <input

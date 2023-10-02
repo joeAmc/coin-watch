@@ -8,10 +8,10 @@ POST http://localhost:4000/coin/new
 Content-Type: application/json
 
 {
-    "ticker": "BTC",
+    "ticker": "LTC",
     "amount": 0.32,
-    "name": "Cardano",
-    "user_id": "64fe34f8ab51f404081a1b6b"
+    "name": "Cardani",
+    "user_id": "64fe34f8ab51f404081a1b62"
 }
 
 ###

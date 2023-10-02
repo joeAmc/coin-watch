@@ -46,6 +46,47 @@ app.post("/coin/new", async (req, res) => {
   }
 });
 
+// const findUserIdByEmail = async (email) => {
+//   try {
+//     const user = await User.findOne({ email });
+//     if (user) {
+//       return user._id;
+//     } else {
+//       return null; // User not found
+//     }
+//   } catch (error) {
+//     console.error(`Error finding user: ${error}`);
+//     throw error;
+//   }
+// };
+
+// app.post("/coin/new", async (req, res) => {
+//   const { email } = req.body;
+
+//   console.log("email", email);
+//   try {
+//     const userId = await findUserIdByEmail(email);
+
+//     if (!userId) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     const coin = new Coin({
+//       ticker: req.body.ticker,
+//       amount: req.body.amount,
+//       name: req.body.name,
+//       user_id: userId,
+//     });
+
+//     await coin.save();
+//     res.status(201).json(coin);
+//     console.log("Coin successfully saved");
+//   } catch (error) {
+//     console.error(`Failed to create coin: ${error}`);
+//     res.status(500).json({ message: "Failed to add coin" });
+//   }
+// });
+
 app.get("/coins/:userId", async (req, res) => {
   const userId = req.params.userId;
 
@@ -105,7 +146,7 @@ app.post("/signup", async (req, res) => {
 
     const token = createToken(user._id);
 
-    res.status(201).json({ token, email });
+    res.status(201).json({ _id: user._id, token, email });
     console.log("user successfully signed up");
   } catch (error) {
     console.error(`Failed to sign up user: ${error}`);
@@ -121,7 +162,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = createToken(user._id);
-    res.json({ token, email });
+    res.json({ token, email, _id: user._id });
     console.log("user successfully logged in");
   } catch (error) {
     console.error(`Failed to log in user: ${error}`);

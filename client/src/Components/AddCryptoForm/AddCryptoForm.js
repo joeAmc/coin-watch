@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../AuthContext";
+import Modal from "../Modal/Modal";
 import { useParams } from "react-router-dom";
 
 const AddCryptoForm = () => {
@@ -6,76 +8,66 @@ const AddCryptoForm = () => {
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { userId } = useParams();
+  const { user } = useParams();
+  const { showModal, setShowModal } = useContext(AuthContext);
 
   const API_SECRET = process.env.REACT_APP_API_SECRET;
   const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const API_URL = process.env.REACT_APP_API;
+  console.log("userId: ", user);
 
-  console.log("name", name);
-  console.log("ticker", ticker);
-  console.log("amount", amount);
-  console.log("amount", amount);
+  const fetchName = async (event) => {
+    event.preventDefault();
+    // setLoading(true);
 
-  useEffect(() => {
-    let retryDelay = 5000; // Initial delay of 5 seconds
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append("QC-Access-Key", API_ACCESS);
+      myHeaders.append("QC-Secret-Key", API_SECRET);
 
-    const fetchCoinData = async () => {
-      try {
-        const myHeaders = new Headers();
-        myHeaders.append("QC-Access-Key", API_ACCESS);
-        myHeaders.append("QC-Secret-Key", API_SECRET);
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-        const requestOptions = {
-          method: "GET",
-          headers: myHeaders,
-          redirect: "follow",
-        };
+      const response = await fetch(
+        `https://quantifycrypto.com/api/v1/coins/${ticker}`,
+        requestOptions
+      );
 
-        const response = await fetch(
-          `https://quantifycrypto.com/api/v1/coins/${ticker}`,
-          requestOptions
-        );
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setName(data.data.coin_name);
-      } catch (error) {
-        console.error(`Error fetching data for ${ticker}:`, error);
+      if (!response.ok) {
+        throw new Error(`Request failed with status: ${response.status}`);
       }
-    };
-    if (ticker) {
-      fetchCoinData();
+
+      const data = await response.json();
+      setName(data.data.coin_name);
+      setShowModal(true);
+    } catch (error) {
+      console.error(`Error fetching data for ${ticker}:`, error);
     }
-  }, [ticker]);
+  };
 
   const handleTickerChange = (event) => {
     setTicker(event.target.value);
-  };
-
-  const handleNameChange = (event) => {
-    setName(event.target.value);
   };
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    // event.preventDefault();
     setLoading(true);
 
     const newCryptoData = {
       ticker: ticker,
       name: name,
       amount: amount,
-      user_id: userId,
+      user_id: user,
     };
 
-    console.log("newCryptoData", newCryptoData);
+    console.log("newCryptoData: ", newCryptoData);
 
     try {
       const response = await fetch(`${API_URL}/coin/new`, {
@@ -104,42 +96,44 @@ const AddCryptoForm = () => {
     setLoading(false);
   };
 
+  const handleConfirmModal = async () => {
+    // Call the handleSubmit function when the modal's Confirm button is clicked
+    await handleSubmit();
+    // Close the modal after handling the submission
+    setShowModal(false);
+  };
+
   return (
     <div className="new-crypto-form-container">
       <h1>Add Crypto</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Ticker
+      <form onSubmit={fetchName}>
+        <p>
+          <label>Ticker</label>
           <input
             type="text"
             value={ticker}
             onChange={handleTickerChange}
             required
+            placeholder="BTC"
           />
-        </label>
+        </p>
+
         <br />
-        <label>
-          Name
-          <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Amount
+        <p>
+          <label>Amount</label>
           <input
             type="text"
             value={amount}
             onChange={handleAmountChange}
             required
           />
-        </label>
+        </p>
         <br />
-        <button type="submit">Add Crypto</button>
+        <button>Add Crypto</button>
       </form>
+      {showModal && (
+        <Modal name={name} amount={amount} onConfirm={handleConfirmModal} />
+      )}
     </div>
   );
 };

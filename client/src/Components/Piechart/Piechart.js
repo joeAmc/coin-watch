@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import "./Piechart.css";
 // import { Chart } from "react-google-charts";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 
