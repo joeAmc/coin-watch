@@ -26,14 +26,11 @@ mongoose
   .catch((err) => console.log(err));
 
 app.post("/coin/new", async (req, res) => {
-  // const userId = req.user._id;
-  const userId = "64fe34f8ab51f404081a1b6a";
-
   const coin = new Coin({
     ticker: req.body.ticker,
     amount: req.body.amount,
     name: req.body.name,
-    user_id: userId,
+    user_id: req.body.user_id,
   });
 
   try {

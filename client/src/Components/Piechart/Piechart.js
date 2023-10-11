@@ -1,9 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "./Piechart.css";
 // import { Chart } from "react-google-charts";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { AuthContext } from "../../AuthContext";
 
 const btc = "6,030";
 
@@ -23,20 +24,22 @@ const Piechart = () => {
   const [responseArray, setResponseArray] = useState([]);
   const removeDups = [...new Set(responseArray)];
   const [coins, setCoins] = useState([]);
-  const { userId } = useParams();
+  const { userId } = useContext(AuthContext);
 
   const API_URL = process.env.REACT_APP_API;
 
-  console.log("responseArray", responseArray);
-  console.log("removeDups", removeDups);
+  // console.log("responseArray", responseArray);
+  // console.log("removeDups", removeDups);
+
+  // console.log("userId", userId);
 
   useEffect(() => {
     getCoins();
   }, []);
 
   const getCoins = () => {
-    // fetch(`http://localhost:4000/coins/${userId}`);
-    fetch(`http://localhost:4000/coins/64fe34f8ab51f404081a1b6a`)
+    fetch(`http://localhost:4000/coins/${userId}`)
+      // fetch(`http://localhost:4000/coins/64fe34f8ab51f404081a1b6a`)
       .then((res) => res.json())
       .then((data) => {
         console.log("coinData", data);
@@ -45,48 +48,48 @@ const Piechart = () => {
       .catch((err) => console.log("Error: ", err));
   };
 
-  useEffect(() => {
-    const fetchCoinData = async (coin) => {
-      // if (responseArray.forEach((item) => item.coin !== coin)) {
-      try {
-        const myHeaders = new Headers();
-        myHeaders.append("QC-Access-Key", API_ACCESS);
-        myHeaders.append("QC-Secret-Key", API_SECRET);
+  // useEffect(() => {
+  //   const fetchCoinData = async (coin) => {
+  //     // if (responseArray.forEach((item) => item.coin !== coin)) {
+  //     try {
+  //       const myHeaders = new Headers();
+  //       myHeaders.append("QC-Access-Key", API_ACCESS);
+  //       myHeaders.append("QC-Secret-Key", API_SECRET);
 
-        const requestOptions = {
-          method: "GET",
-          headers: myHeaders,
-          redirect: "follow",
-        };
+  //       const requestOptions = {
+  //         method: "GET",
+  //         headers: myHeaders,
+  //         redirect: "follow",
+  //       };
 
-        const response = await fetch(
-          `https://quantifycrypto.com/api/v1/coins/${coin}`,
-          requestOptions
-        );
+  //       const response = await fetch(
+  //         `https://quantifycrypto.com/api/v1/coins/${coin}`,
+  //         requestOptions
+  //       );
 
-        if (!response.ok) {
-          throw new Error(`Request failed with status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`Request failed with status: ${response.status}`);
+  //       }
 
-        const data = await response.json();
-        console.log("data", data);
+  //       const data = await response.json();
+  //       console.log("data", data);
 
-        setResponseArray((prevResponseArray) => [
-          ...prevResponseArray,
-          { coin: coin, value: data.data.coin_price, label: coin },
-        ]);
-      } catch (error) {
-        console.error(`Error fetching data for ${coin}:`, error);
-      }
-    };
-    // };
+  //       setResponseArray((prevResponseArray) => [
+  //         ...prevResponseArray,
+  //         { coin: coin, value: data.data.coin_price, label: coin },
+  //       ]);
+  //     } catch (error) {
+  //       console.error(`Error fetching data for ${coin}:`, error);
+  //     }
+  //   };
+  //   // };
 
-    const coins = ["BTC", "ETH"];
+  //   const coins = ["BTC", "ETH"];
 
-    coins.forEach((coin) => {
-      fetchCoinData(coin);
-    });
-  }, []);
+  //   coins.forEach((coin) => {
+  //     fetchCoinData(coin);
+  //   });
+  // }, []);
 
   return (
     <PieChart

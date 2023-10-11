@@ -1,6 +1,6 @@
 ###
 
-GET http://localhost:4000/coins/64fe34f8ab51f404081a1b6a
+GET http://localhost:4000/coins/65270cdd257cd0a7b40daa8a
 
 ###
 

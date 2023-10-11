@@ -8,13 +8,13 @@ const AddCryptoForm = () => {
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user } = useParams();
-  const { showModal, setShowModal } = useContext(AuthContext);
+  // const { user } = useParams();
+  const { showModal, setShowModal, userId } = useContext(AuthContext);
 
   const API_SECRET = process.env.REACT_APP_API_SECRET;
   const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const API_URL = process.env.REACT_APP_API;
-  console.log("userId: ", user);
+  console.log("Add userId: ", userId);
 
   const fetchName = async (event) => {
     event.preventDefault();
@@ -64,7 +64,7 @@ const AddCryptoForm = () => {
       ticker: ticker,
       name: name,
       amount: amount,
-      user_id: user,
+      user_id: userId,
     };
 
     console.log("newCryptoData: ", newCryptoData);

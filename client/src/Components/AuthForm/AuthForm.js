@@ -17,14 +17,17 @@ const Auth = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertClass, setAlertClass] = useState("x");
   const [success, setSuccess] = useState();
-  const { setLoggedIn, showAlert, setShowAlert } = useContext(AuthContext);
-  const [userId, setUserId] = useState("");
+  const {
+    setLoggedIn,
+    showAlert,
+    setShowAlert,
+    setUserId,
+    userId,
+  } = useContext(AuthContext);
+
+  console.log("Auth userId: ", userId);
 
   const API_URL = process.env.REACT_APP_API;
-
-  //   const handleUserNameChange = (event) => {
-  //     setUserName(event.target.value);
-  //   };
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -112,7 +115,9 @@ const Auth = () => {
           console.log("Logged in successfully!");
           setLoggedIn(true);
         }
-        navigate(`/add/${json._id}`);
+        console.log(json._id, "......../ HHe!");
+        setUserId(json._id);
+        navigate("/add");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
       } else {
         console.error("Failed to sign up or log in");

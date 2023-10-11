@@ -10,6 +10,7 @@ import UpdateCrypto from "./Pages/UpdateCrypto";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState("");
 
   return (
     <div className="App">
@@ -17,13 +18,15 @@ function App() {
         value={{
           loggedIn,
           showModal,
+          userId,
+          setUserId,
           setLoggedIn,
           setShowModal,
         }}
       >
         <Routes>
           <Route path="/" element={<Auth />} />
-          <Route path="/add/:user" element={<AddCrypto />} />
+          <Route path="/add" element={<AddCrypto />} />
           <Route path="/portfoglio" element={<Portfoglio />} />
           <Route path="/update" element={<UpdateCrypto />} />
         </Routes>
