@@ -23,7 +23,7 @@ const Modal = ({ amount, name, backgroundColor, onConfirm }) => {
       {/* <div className={`modal ${backgroundColor}`}> */}
       <div className={`modal success`}>
         <div className="modal-info">
-          <p>{`Add ${amount} units of ${name}?`}</p>
+          <p>{`Confirm ${amount} units of ${name}?`}</p>
         </div>
         <div className="modal-btns">
           <button className="modal-close-btn" onClick={cancelModalHandler}>
