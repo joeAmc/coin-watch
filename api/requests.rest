@@ -32,7 +32,7 @@ PUT http://localhost:4000/coin/update/64fe382a8418c413de514ed0
 Content-Type: application/json
 
 {
-  "amount": 0.63
+  "amount": 0.7
 }
 
 ###
