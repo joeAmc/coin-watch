@@ -13,12 +13,12 @@ import { gridStyles } from "./gridStyles";
 const Table = () => {
   const API_URL = process.env.REACT_APP_API;
   const [coins, setCoins] = useState([]);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [rowModesModel, setRowModesModel] = useState({});
   const [newAmount, setNewAmount] = useState("");
   const { userId, showModal, setShowModal } = useContext(AuthContext);
   const [id, setId] = useState("");
-  // const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
+  const [action, setAction] = useState("");
 
   useEffect(() => {
     getCoins();
@@ -43,8 +43,8 @@ const Table = () => {
   const initialRows = coins.map((coin) => {
     return createData(coin._id, coin.name, coin.ticker, coin.amount);
   });
-  const [rows, setRows] = useState([initialRows]);
 
+  const [rows, setRows] = useState([initialRows]);
   const myTheme = createTheme({
     components: {
       MuiDataGrid: {
@@ -64,30 +64,29 @@ const Table = () => {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setAction("update");
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  // const handleDeleteClick = (id) => () => {
-  //   setRows(rows.filter((row) => row.id !== id));
-  // };
-
   const handleCancelClick = (id) => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
-    const editedRow = rows.find((row) => row.id === id);
-    setRows(rows.filter((row) => row.id !== id));
   };
 
   // handle amount update
-  const handleModalUpdateConfirm = async () => {
-    await handleUpdateSubmit();
-    setShowModal(false);
+  const handleModalSubmit = async () => {
+    if (action === "delete") {
+      await handleDeleteSubmit(id);
+      setShowModal(false);
+    } else if (action === "update") {
+      await handleUpdateSubmit();
+      setShowModal(false);
+    }
   };
 
   const processRowUpdate = (newRow) => {
@@ -125,52 +124,23 @@ const Table = () => {
     }
   };
 
-  // handle delete coin
-
-  const handleModalDeleteConfirm = async () => {
-    await handleDeleteSubmit();
-    setShowModal(false);
-  };
-
-  console.log("coins", coins);
-
-  const handleDeleteRow = (id) => {
-    // Remove the row from the coins array
-    const updatedCoins = coins.filter((coin) => coin._id !== id);
-    setCoins(updatedCoins);
-
-    // Remove the row from the DataGrid by setting its mode to View
-    setRowModesModel((prevRowModesModel) => ({
-      ...prevRowModesModel,
-      [id]: { mode: GridRowModes.View },
-    }));
-
-    // Optional: You can also setRows if you want to immediately remove it from the DataGrid display.
-    // const updatedRows = rows.filter((row) => row.id !== id);
-    // setRows(updatedRows);
-  };
-
-  // const processRowDelete = (newRow) => {
-  //   const updatedRow = { ...newRow };
-  //   console.log("updatedRow", updatedRow);
-  //   setNewAmount(updatedRow.amount);
-  //   setShowModal(true);
-  //   setName(updatedRow.name);
-  //   setId(updatedRow.id);
-  //   setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  //   return updatedRow;
-  // };
-
   const handleDeleteClick = (id) => () => {
-    // ...
-    setShowModal(true);
-    // setName(updatedRow.name);
-    // setId(updatedRow.id);
+    const coinToDelete = coins.find((coin) => coin._id === id);
+    if (coinToDelete) {
+      const { name, amount } = coinToDelete;
 
-    handleDeleteRow(id);
+      // Set the name and amount in the component state
+      setName(name);
+      setNewAmount(amount);
+      setShowModal(true);
+      setAction("delete");
+      setId(id);
+    }
   };
 
-  const handleDeleteSubmit = async () => {
+  const handleDeleteSubmit = async (id) => {
+    // Remove the row from the DataGrid by setting its mode to View
+
     try {
       const response = await fetch(`${API_URL}/coin/delete/${id}`, {
         method: "DELETE",
@@ -182,6 +152,12 @@ const Table = () => {
 
       if (response.ok) {
         console.log("Coin deleted successfully");
+        const updatedCoins = coins.filter((coin) => coin._id !== id);
+        setCoins(updatedCoins);
+        setRowModesModel((prevRowModesModel) => ({
+          ...prevRowModesModel,
+          [id]: { mode: GridRowModes.View },
+        }));
       } else {
         console.error("Failed to delete coin amount");
       }
@@ -286,7 +262,8 @@ const Table = () => {
         <Modal
           name={name}
           amount={newAmount}
-          onConfirm={handleModalUpdateConfirm}
+          onConfirm={handleModalSubmit}
+          action={action}
         />
       )}
     </ThemeProvider>

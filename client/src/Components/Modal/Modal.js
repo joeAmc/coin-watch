@@ -4,7 +4,7 @@ import { AuthContext } from "../../AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
-const Modal = ({ amount, name, backgroundColor, onConfirm }) => {
+const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
   const navigate = useNavigate();
   const { showModal, setShowModal } = useContext(AuthContext);
 
@@ -14,16 +14,24 @@ const Modal = ({ amount, name, backgroundColor, onConfirm }) => {
   };
 
   const addModalHandler = () => {
+    console.log("confirming!");
     onConfirm(); // Call the parent's callback function
     // navigate(`/add`);
   };
+
+  console.log("amount", amount);
+  console.log("name", name);
 
   return (
     <>
       {/* <div className={`modal ${backgroundColor}`}> */}
       <div className={`modal success`}>
         <div className="modal-info">
-          <p>{`Confirm ${amount} units of ${name}?`}</p>
+          <p>
+            {action === "update"
+              ? `Confirm ${amount} units of ${name}?`
+              : `Are you sure you want to delete ${amount} units of ${name}?`}
+          </p>
         </div>
         <div className="modal-btns">
           <button className="modal-close-btn" onClick={cancelModalHandler}>
