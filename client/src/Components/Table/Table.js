@@ -19,19 +19,22 @@ const Table = () => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [action, setAction] = useState("");
+  const [initialRows, setInitialRows] = useState([]);
 
   useEffect(() => {
     getCoins();
-  }, []);
-
-  console.log("coins", coins);
+  }, [initialRows]);
 
   const getCoins = () => {
-    // fetch(`${API_URL}/coins/${userId}`)
-    fetch(`${API_URL}/coins/65285e63aa3062a5429f4956`)
+    fetch(`${API_URL}/coins/${userId}`)
+      // fetch(`${API_URL}/coins/6550aef4bff6ff1f42769fbd`)
       .then((res) => res.json())
       .then((data) => {
         setCoins(data);
+        const newInitialRows = coins.map((coin) => {
+          return createData(coin._id, coin.name, coin.ticker, coin.amount);
+        });
+        setInitialRows(newInitialRows);
       })
       .catch((err) => console.log("Error: ", err));
   };
@@ -40,19 +43,11 @@ const Table = () => {
     return { id, name, ticker, amount };
   };
 
-  const initialRows = coins.map((coin) => {
-    return createData(coin._id, coin.name, coin.ticker, coin.amount);
-  });
-
-  const [rows, setRows] = useState([initialRows]);
   const myTheme = createTheme({
     components: {
       MuiDataGrid: {
         styleOverrides: {
           row: {
-            "&.Mui-selected": {
-              color: "#6ece95",
-            },
             "&.textPrimary": {
               color: "purple",
             },
@@ -91,12 +86,10 @@ const Table = () => {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
-    console.log("updatedRow", updatedRow);
     setNewAmount(updatedRow.amount);
     setShowModal(true);
     setName(updatedRow.name);
     setId(updatedRow.id);
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
 
@@ -128,8 +121,6 @@ const Table = () => {
     const coinToDelete = coins.find((coin) => coin._id === id);
     if (coinToDelete) {
       const { name, amount } = coinToDelete;
-
-      // Set the name and amount in the component state
       setName(name);
       setNewAmount(amount);
       setShowModal(true);
@@ -139,8 +130,6 @@ const Table = () => {
   };
 
   const handleDeleteSubmit = async (id) => {
-    // Remove the row from the DataGrid by setting its mode to View
-
     try {
       const response = await fetch(`${API_URL}/coin/delete/${id}`, {
         method: "DELETE",
@@ -168,21 +157,27 @@ const Table = () => {
 
   const columns = [
     { field: "id", headerName: "Id" },
-    { field: "name", headerName: "Crypto", flex: 1 },
+    {
+      field: "name",
+      headerName: "Crypto",
+      flex: 0.8,
+    },
     {
       field: "amount",
       headerName: "Units",
       headerAlign: "left",
       type: "number",
-      flex: 0.8,
+      flex: 0.6,
       editable: true,
       align: "left",
     },
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
-      flex: 1,
+      headerName: "Edit",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.4,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -235,8 +230,10 @@ const Table = () => {
           top: "45%",
           left: "50%",
           width: "90%",
+          maxWidth: "659px",
           transform: "translate(-50%, -50%)",
           boxShadow: "0 0 25px rgba(122, 215, 138, 0.35)",
+          backgroundColor: "#131922",
         }}
       >
         <DataGrid

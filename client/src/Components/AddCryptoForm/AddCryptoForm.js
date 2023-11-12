@@ -16,23 +16,18 @@ const AddCryptoForm = () => {
   const API_URL = process.env.REACT_APP_API;
   console.log("Add userId: ", userId);
 
-  const fetchName = async (event) => {
+  const fetchTicker = async (event) => {
     event.preventDefault();
     // setLoading(true);
 
     try {
-      const myHeaders = new Headers();
-      myHeaders.append("QC-Access-Key", API_ACCESS);
-      myHeaders.append("QC-Secret-Key", API_SECRET);
-
       const requestOptions = {
         method: "GET",
-        headers: myHeaders,
         redirect: "follow",
       };
 
       const response = await fetch(
-        `https://quantifycrypto.com/api/v1/coins/${ticker}`,
+        `https://api.coincap.io/v2/assets/${name}`,
         requestOptions
       );
 
@@ -40,16 +35,48 @@ const AddCryptoForm = () => {
         throw new Error(`Request failed with status: ${response.status}`);
       }
 
-      const data = await response.json();
-      setName(data.data.coin_name);
+      const result = await response.json();
+      setTicker(result.data.symbol);
       setShowModal(true);
     } catch (error) {
-      console.error(`Error fetching data for ${ticker}:`, error);
+      console.error(`Error fetching data for ${name}:`, error);
     }
   };
 
-  const handleTickerChange = (event) => {
-    setTicker(event.target.value);
+  // const fetchName = async (event) => {
+  //   event.preventDefault();
+  //   // setLoading(true);
+
+  //   try {
+  //     const myHeaders = new Headers();
+  //     myHeaders.append("QC-Access-Key", API_ACCESS);
+  //     myHeaders.append("QC-Secret-Key", API_SECRET);
+
+  //     const requestOptions = {
+  //       method: "GET",
+  //       headers: myHeaders,
+  //       redirect: "follow",
+  //     };
+
+  //     const response = await fetch(
+  //       `https://quantifycrypto.com/api/v1/coins/${ticker}`,
+  //       requestOptions
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error(`Request failed with status: ${response.status}`);
+  //     }
+
+  //     const data = await response.json();
+  //     setName(data.data.coin_name);
+  //     setShowModal(true);
+  //   } catch (error) {
+  //     console.error(`Error fetching data for ${ticker}:`, error);
+  //   }
+  // };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
   };
 
   const handleAmountChange = (event) => {
@@ -106,15 +133,15 @@ const AddCryptoForm = () => {
   return (
     <div className="new-crypto-form-container">
       <h1>Add Crypto</h1>
-      <form onSubmit={fetchName}>
+      <form onSubmit={fetchTicker}>
         <p>
-          <label>Ticker</label>
+          <label>Crypto Name</label>
           <input
             type="text"
-            value={ticker}
-            onChange={handleTickerChange}
+            value={name}
+            onChange={handleNameChange}
             required
-            placeholder="BTC"
+            placeholder="Bitcoin"
           />
         </p>
 

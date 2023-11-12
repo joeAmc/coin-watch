@@ -8,10 +8,10 @@ POST http://localhost:4000/coin/new
 Content-Type: application/json
 
 {
-    "ticker": "ETC",
-    "amount": 0.32,
-    "name": "Cardani",
-    "user_id": "64fe34f8ab51f404081a1b62"
+    "ticker": "QNT",
+    "amount": 200,
+    "name": "Quant",
+    "user_id": "65285e63aa3062a5429f4956"
 }
 
 ###

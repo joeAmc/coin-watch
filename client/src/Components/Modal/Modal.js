@@ -20,7 +20,7 @@ const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
   };
 
   console.log("amount", amount);
-  console.log("name", name);
+  // console.log("name", name);
 
   return (
     <>

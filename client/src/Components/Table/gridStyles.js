@@ -4,10 +4,10 @@ export const gridStyles = {
   color: "white",
   borderColor: "#61759b",
   "& .MuiDataGrid-row:hover": {
-    color: "#6ece95",
+    // color: "#61759b",
   },
   "& .MuiDataGrid-row--editing .MuiDataGrid-cell": {
-    backgroundColor: "#61759b",
+    backgroundColor: "#131922",
     color: "white",
   },
   "& .MuiDataGrid-editInputCell input": {
@@ -19,7 +19,7 @@ export const gridStyles = {
     background: "transparent",
   },
   "& .MuiButtonBase-root:hover": {
-    color: "#6ece95",
+    color: "#61759b",
     background: "transparent",
   },
   "& .MuiDataGrid-cell, .MuiDataGrid-columnHeader": {
@@ -27,11 +27,12 @@ export const gridStyles = {
     borderColor: "#61759b",
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    fontSize: "16px",
+    fontSize: "20px",
+    color: "#6ece95",
   },
   "& .MuiDataGrid-columnHeaders": {
     borderColor: "#61759b",
-    borderWidth: "0 0 2px 0",
+    borderWidth: "0 0 1px 0",
   },
   "& .MuiIconButton-root": {
     width: "unset",
@@ -39,7 +40,14 @@ export const gridStyles = {
   "& .MuiDataGrid-columnHeaderTitleContainer": {
     flexDirection: "unset",
   },
-  "& .MuiDataGrid-row--editing": {
-    backgroundColor: "purple!important",
+  "& .MuiDataGrid-cellContent": {
+    fontSize: "16px",
   },
+
+  // "& .MuiDataGrid-virtualScrollerContent": {
+  //   height: "100px",
+  // },
+  // "& .css-1kwdphh-MuiDataGrid-virtualScrollerContent": {
+  //   height: "100px!important",
+  // },
 };

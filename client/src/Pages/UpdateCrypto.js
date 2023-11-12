@@ -1,6 +1,6 @@
 import React from "react";
 import Nav from "../Components/Nav/Nav";
-import CryptoTable from "../Components/CryptoTable/CryptoTable";
+// import CryptoTable from "../Components/CryptoTable/CryptoTable";
 import Table from "../Components/Table/Table";
 
 const UpdateCrypto = () => {
