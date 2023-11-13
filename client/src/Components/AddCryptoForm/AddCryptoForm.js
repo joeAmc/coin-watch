@@ -1,21 +1,56 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import Modal from "../Modal/Modal";
 import { useParams } from "react-router-dom";
-import ComboBox from "../ComboBox/ComboBox";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const AddCryptoForm = () => {
   const [ticker, setTicker] = useState("");
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
+
   const [loading, setLoading] = useState(false);
-  // const { user } = useParams();
+  const [coinData, setCoinData] = useState([]);
   const { showModal, setShowModal, userId } = useContext(AuthContext);
 
   const API_SECRET = process.env.REACT_APP_API_SECRET;
   const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const API_URL = process.env.REACT_APP_API;
-  console.log("Add userId: ", userId);
+
+  useEffect(() => {
+    const fetchCoinIds = async () => {
+      try {
+        const requestOptions = {
+          method: "GET",
+          redirect: "follow",
+        };
+
+        const response = await fetch(
+          `https://api.coincap.io/v2/assets`,
+          requestOptions
+        );
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+        const result = await response.json();
+
+        const coinIdAndName = result.data.map((coin) => ({
+          id: coin.id,
+          name: coin.name,
+        }));
+
+        setCoinData(coinIdAndName);
+      } catch (error) {
+        console.error(`Error fetching coin ids:`, error);
+      }
+    };
+    fetchCoinIds();
+  }, []);
 
   const fetchTicker = async (event) => {
     event.preventDefault();
@@ -44,10 +79,9 @@ const AddCryptoForm = () => {
     }
   };
 
-  const options = ["bitcoin", "solana", "binance-coin"];
-
   const handleNameChange = (event) => {
     setName(event.target.value);
+    console.log("event.target.value", name);
   };
 
   const handleAmountChange = (event) => {
@@ -64,8 +98,6 @@ const AddCryptoForm = () => {
       amount: amount,
       user_id: userId,
     };
-
-    console.log("newCryptoData: ", newCryptoData);
 
     try {
       const response = await fetch(`${API_URL}/coin/new`, {
@@ -95,29 +127,35 @@ const AddCryptoForm = () => {
   };
 
   const handleConfirmModal = async () => {
-    // Call the handleSubmit function when the modal's Confirm button is clicked
     await handleSubmit();
-    // Close the modal after handling the submission
     setShowModal(false);
   };
 
+  console.log("name", name);
   return (
     <div className="new-crypto-form-container">
       <h1>Add Crypto</h1>
 
       <form onSubmit={fetchTicker}>
-        <ComboBox options={options} />
         <p>
           <label>Crypto Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            required
-            placeholder="Bitcoin"
-          />
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={name}
+                label={false}
+                onChange={handleNameChange}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                {coinData.map((coin) => (
+                  <MenuItem value={coin.id}>{coin.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </p>
-
         <br />
         <p>
           <label>Amount</label>
