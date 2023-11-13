@@ -2,14 +2,9 @@ import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "./Piechart.css";
-// import { Chart } from "react-google-charts";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { AuthContext } from "../../AuthContext";
 import { createTheme, ThemeProvider } from "@mui/material";
-
-// export const options = {
-//   title: "My Cryptos",
-// };
 
 const Piechart = () => {
   const API_SECRET = process.env.REACT_APP_API_SECRET;
@@ -19,6 +14,20 @@ const Piechart = () => {
   const [userCoinAmounts, setUserCoinAmounts] = useState([]);
   const { userId } = useContext(AuthContext);
   const API_URL = process.env.REACT_APP_API;
+
+  const myTheme = createTheme({
+    components: {
+      PieChart: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: "pink",
+            color: "red",
+            border: "1px solid #dadde9",
+          },
+        },
+      },
+    },
+  });
 
   useEffect(() => {
     getCoins();
@@ -88,47 +97,86 @@ const Piechart = () => {
     });
   }, [coins]);
 
-  // Step 1: Calculate the total sum of all values
   const totalSum = data.reduce((sum, item) => sum + parseFloat(item.value), 0);
-
-  // Step 2: Calculate the percentage for each value
-  const dataWithPercentage = data.map((item) => ({
-    ...item,
-    percentage: (item.value / totalSum) * 100,
-  }));
-
-  console.log(dataWithPercentage);
-
-  // const getArcLabel = (params) => {
-  //   const percent = params.value / TOTAL;
-  //   console.log("params.value", params.value);
-  //   return `${(percent * 100).toFixed(0)}%`;
-  // };
 
   const getArcLabel = (params) => {
     const percent = params.value / totalSum;
-    console.log("percent", percent);
     return `${params.label} ${(percent * 100).toFixed(0)}%`;
   };
 
+  const sizing = {
+    margin: { top: 0, right: 0, bottom: 0, left: 0 },
+    width: 280,
+    height: 275,
+    // legend: { hidden: true },
+  };
+
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  const customTooltipFormatter = (params) => {
+    const value = parseFloat(params.value) || 0;
+    const formattedValue = currencyFormatter.format(value);
+    return `${params.label}: ${formattedValue}`;
+  };
+
+  const totalPortfolioValue = data.reduce(
+    (sum, item) => sum + parseFloat(item.value),
+    0
+  );
+
   return (
-    <PieChart
-      series={[
-        {
-          arcLabel: getArcLabel,
-          data,
-        },
-      ]}
-      sx={{
-        [`& .${pieArcLabelClasses.root}`]: {
-          fill: "white",
-          fontWeight: "regular",
-          fontSize: 16,
-        },
-      }}
-      width={400}
-      height={250}
-    />
+    <ThemeProvider theme={myTheme}>
+      <div
+        className="piechart-container"
+        style={{
+          position: "absolute",
+          top: "45%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <PieChart
+          slotProps={{
+            legend: {
+              direction: "row",
+              // position: { vertical: "top", horizontal: "middle" },
+              padding: 0,
+            },
+          }}
+          className="custom-pie-chart"
+          series={[
+            {
+              arcLabel: getArcLabel,
+              arcLabelMinAngle: 30,
+              paddingAngle: 3,
+              innerRadius: 8,
+              data,
+              highlightScope: { faded: "global", highlighted: "item" },
+              faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+              valueFormatter: customTooltipFormatter,
+            },
+          ]}
+          // tooltip={{
+          //   valueFormatter: customTooltipFormatter,
+          // }}
+          sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+              fill: "white",
+              fontWeight: "regular",
+              fontSize: 16,
+              fontFamily: "'Fira Sans', sans-serif",
+            },
+          }}
+          {...sizing}
+        />
+      </div>
+      <h4 className="total-value">
+        Total Value: {currencyFormatter.format(totalPortfolioValue)}
+      </h4>
+    </ThemeProvider>
   );
 };
 

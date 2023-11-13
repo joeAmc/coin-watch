@@ -160,14 +160,16 @@ const Table = () => {
     {
       field: "name",
       headerName: "Crypto",
-      flex: 0.8,
+      flex: 1,
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "amount",
       headerName: "Units",
       headerAlign: "left",
       type: "number",
-      flex: 0.6,
+      flex: 0.9,
       editable: true,
       align: "left",
     },
@@ -177,7 +179,7 @@ const Table = () => {
       headerName: "Edit",
       headerAlign: "center",
       align: "center",
-      flex: 0.4,
+      flex: 1,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;

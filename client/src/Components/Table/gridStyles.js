@@ -11,7 +11,7 @@ export const gridStyles = {
     color: "white",
   },
   "& .MuiDataGrid-editInputCell input": {
-    padding: "0 30px",
+    padding: "0 0 0 16px",
     color: "white",
   },
   "& .MuiButtonBase-root": {
@@ -23,11 +23,11 @@ export const gridStyles = {
     background: "transparent",
   },
   "& .MuiDataGrid-cell, .MuiDataGrid-columnHeader": {
-    padding: "0 30px",
+    padding: "0 0 0 16px",
     borderColor: "#61759b",
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    fontSize: "20px",
+    fontSize: "16px",
     color: "#6ece95",
   },
   "& .MuiDataGrid-columnHeaders": {

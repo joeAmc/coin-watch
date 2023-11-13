@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthContext";
 import Modal from "../Modal/Modal";
 import { useParams } from "react-router-dom";
+import ComboBox from "../ComboBox/ComboBox";
 
 const AddCryptoForm = () => {
   const [ticker, setTicker] = useState("");
@@ -43,37 +44,7 @@ const AddCryptoForm = () => {
     }
   };
 
-  // const fetchName = async (event) => {
-  //   event.preventDefault();
-  //   // setLoading(true);
-
-  //   try {
-  //     const myHeaders = new Headers();
-  //     myHeaders.append("QC-Access-Key", API_ACCESS);
-  //     myHeaders.append("QC-Secret-Key", API_SECRET);
-
-  //     const requestOptions = {
-  //       method: "GET",
-  //       headers: myHeaders,
-  //       redirect: "follow",
-  //     };
-
-  //     const response = await fetch(
-  //       `https://quantifycrypto.com/api/v1/coins/${ticker}`,
-  //       requestOptions
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`Request failed with status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     setName(data.data.coin_name);
-  //     setShowModal(true);
-  //   } catch (error) {
-  //     console.error(`Error fetching data for ${ticker}:`, error);
-  //   }
-  // };
+  const options = ["bitcoin", "solana", "binance-coin"];
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -133,7 +104,9 @@ const AddCryptoForm = () => {
   return (
     <div className="new-crypto-form-container">
       <h1>Add Crypto</h1>
+
       <form onSubmit={fetchTicker}>
+        <ComboBox options={options} />
         <p>
           <label>Crypto Name</label>
           <input

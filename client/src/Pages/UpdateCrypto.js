@@ -6,7 +6,7 @@ import Table from "../Components/Table/Table";
 const UpdateCrypto = () => {
   return (
     <div>
-      <h1>Portfoglio</h1>
+      <h1>Edit crypto</h1>
       {/* <CryptoTable /> */}
       <Table />
       <Nav />

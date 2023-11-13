@@ -1,3 +1,15 @@
 .css-1xkz0he-MuiResponsiveChart-container {
   width: unset !important;
 }
+
+.custom-pie-chart {
+  fill: white !important;
+}
+
+.total-value {
+  text-align: center;
+  margin-top: 70px;
+  font-size: 18px;
+  position: absolute;
+  bottom: 200px;
+}

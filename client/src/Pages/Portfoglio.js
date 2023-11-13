@@ -5,7 +5,7 @@ import Piechart from "../Components/Piechart/Piechart";
 const portfoglio = () => {
   return (
     <>
-      <h1>portfoglio</h1>
+      <h1>Crypto split</h1>
       <Piechart />
       <Nav />
     </>
