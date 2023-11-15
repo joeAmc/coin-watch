@@ -25,8 +25,6 @@ const Auth = () => {
     userId,
   } = useContext(AuthContext);
 
-  console.log("Auth userId: ", userId);
-
   const API_URL = process.env.REACT_APP_API;
 
   const handleEmailChange = (event) => {
@@ -62,7 +60,6 @@ const Auth = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    console.log("submitting");
 
     if (password.length < 8) {
       setAlertMessage("Password must be at least 8 characters long");
@@ -90,7 +87,6 @@ const Auth = () => {
       email: email,
       password: password,
     };
-    console.log("API", `${API_URL}/signup`);
 
     try {
       const endpoint = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
@@ -117,7 +113,7 @@ const Auth = () => {
         }
         console.log(json._id, "......../ HHe!");
         setUserId(json._id);
-        navigate("/add");
+        navigate("/portfoglio");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
       } else {
         console.error("Failed to sign up or log in");

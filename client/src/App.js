@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 import Auth from "./Pages/Auth";
@@ -11,6 +11,13 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState("");
+
+  // useEffect(() => {
+  //   const user = localStorage.getItem("pie-bit-user");
+  //   if (user) {
+  //     setLoggedIn(true);
+  //   }
+  // }, []);
 
   return (
     <div className="App">

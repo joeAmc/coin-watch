@@ -1,0 +1,10 @@
+.signout-container {
+  background-color: var(--dark-alt);
+  padding: 22px;
+  box-shadow: var(--box-shadow);
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 90%;
+  transform: translate(-50%, -50%);
+}

@@ -15,20 +15,6 @@ const Piechart = () => {
   const { userId } = useContext(AuthContext);
   const API_URL = process.env.REACT_APP_API;
 
-  const myTheme = createTheme({
-    components: {
-      PieChart: {
-        styleOverrides: {
-          tooltip: {
-            backgroundColor: "pink",
-            color: "red",
-            border: "1px solid #dadde9",
-          },
-        },
-      },
-    },
-  });
-
   useEffect(() => {
     getCoins();
   }, []);
@@ -128,7 +114,7 @@ const Piechart = () => {
   );
 
   return (
-    <ThemeProvider theme={myTheme}>
+    <>
       <div
         className="piechart-container"
         style={{
@@ -176,7 +162,7 @@ const Piechart = () => {
       <h4 className="total-value">
         Total Value: {currencyFormatter.format(totalPortfolioValue)}
       </h4>
-    </ThemeProvider>
+    </>
   );
 };
 

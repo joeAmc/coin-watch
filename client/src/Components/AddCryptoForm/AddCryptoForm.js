@@ -7,6 +7,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import "./AddCryptoForm.css";
 
 const AddCryptoForm = () => {
   const [ticker, setTicker] = useState("");
@@ -134,25 +135,60 @@ const AddCryptoForm = () => {
   console.log("name", name);
   return (
     <div className="new-crypto-form-container">
-      <h1>Add Crypto</h1>
-
       <form onSubmit={fetchTicker}>
         <p>
           <label>Crypto Name</label>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
+          {/* <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              label={false}
+              onChange={handleNameChange}
+            >
+              {coinData.map((coin) => (
+                <MenuItem value={coin.id}>{coin.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl> */}
+          <Box>
+            <FormControl sx={{ minWidth: "100%" }}>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={name}
-                label={false}
+                // value={age}
                 onChange={handleNameChange}
-                inputProps={{ "aria-label": "Without label" }}
+                displayEmpty
+                inputProps={{
+                  sx: {
+                    bgcolor: "#61759b",
+                    color: "white",
+                    textAlign: "start",
+                    paddingTop: 1,
+                    paddingBottom: 1,
+                    "& .MuiSvgIcon-root": {
+                      color: "white",
+                      fill: "white",
+                    },
+                  },
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      bgcolor: "#253040",
+                      color: "white",
+                      "& .MuiMenuItem-root": {
+                        padding: 2,
+                      },
+                    },
+                  },
+                }}
               >
+                {/* <MenuItem value="">
+                  <em>None</em>
+                </MenuItem> */}
                 {coinData.map((coin) => (
                   <MenuItem value={coin.id}>{coin.name}</MenuItem>
                 ))}
               </Select>
+              {/* <FormHelperText>Without label</FormHelperText> */}
             </FormControl>
           </Box>
         </p>
