@@ -11,3 +11,9 @@
   margin-top: 10px;
   font-size: 16px;
 }
+
+.css-veltv6-MuiPieArc-root {
+  /* Your styles here */
+  stroke: #fdfafa;
+  color: red !important;
+}

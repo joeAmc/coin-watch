@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./AddCryptoForm.css";
+import * as R from "ramda";
 
 const AddCryptoForm = () => {
   const [ticker, setTicker] = useState("");
@@ -17,10 +18,14 @@ const AddCryptoForm = () => {
   const [loading, setLoading] = useState(false);
   const [coinData, setCoinData] = useState([]);
   const { showModal, setShowModal, userId } = useContext(AuthContext);
+  const [action, setAction] = useState("");
 
   const API_SECRET = process.env.REACT_APP_API_SECRET;
   const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const API_URL = process.env.REACT_APP_API;
+
+  let storedUserID = localStorage.getItem("pie-bit-user-id");
+  storedUserID = R.replace(/^"|"$/g, "", storedUserID);
 
   useEffect(() => {
     const fetchCoinIds = async () => {
@@ -75,6 +80,7 @@ const AddCryptoForm = () => {
       const result = await response.json();
       setTicker(result.data.symbol);
       setShowModal(true);
+      setAction("add");
     } catch (error) {
       console.error(`Error fetching data for ${name}:`, error);
     }
@@ -97,7 +103,7 @@ const AddCryptoForm = () => {
       ticker: ticker,
       name: name,
       amount: amount,
-      user_id: userId,
+      user_id: storedUserID,
     };
 
     try {
@@ -132,24 +138,11 @@ const AddCryptoForm = () => {
     setShowModal(false);
   };
 
-  console.log("name", name);
   return (
     <div className="new-crypto-form-container">
       <form onSubmit={fetchTicker}>
         <p>
           <label>Crypto Name</label>
-          {/* <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              label={false}
-              onChange={handleNameChange}
-            >
-              {coinData.map((coin) => (
-                <MenuItem value={coin.id}>{coin.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
           <Box>
             <FormControl sx={{ minWidth: "100%" }}>
               <Select
@@ -206,7 +199,12 @@ const AddCryptoForm = () => {
         <button>Add Crypto</button>
       </form>
       {showModal && (
-        <Modal name={name} amount={amount} onConfirm={handleConfirmModal} />
+        <Modal
+          name={name}
+          amount={amount}
+          action={action}
+          onConfirm={handleConfirmModal}
+        />
       )}
     </div>
   );

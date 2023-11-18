@@ -108,13 +108,13 @@ const Auth = () => {
           setSuccess(true);
           setLoggedIn(true);
         } else {
-          console.log("Logged in successfully!");
           setLoggedIn(true);
         }
-        console.log(json._id, "......../ HHe!");
         setUserId(json._id);
+        console.log("json._id", json._id);
         navigate("/portfoglio");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
+        localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));
       } else {
         console.error("Failed to sign up or log in");
         setAlertMessage(signUp ? "Failed to sign up" : "Failed to log in");

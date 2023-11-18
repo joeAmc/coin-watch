@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.9",
     "@mui/styled-engine-sc": "^5.14.9",
+    "@mui/styles": "^5.14.18",
     "@mui/x-charts": "^6.0.0-alpha.11",
     "@mui/x-data-grid": "^6.16.2",
     "@mui/x-data-grid-generator": "^6.16.2",

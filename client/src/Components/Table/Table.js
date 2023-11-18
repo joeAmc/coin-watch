@@ -9,29 +9,33 @@ import { GridRowModes, DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { AuthContext } from "../../AuthContext";
 import Modal from "../Modal/Modal";
 import { gridStyles } from "./gridStyles";
+import * as R from "ramda";
 
 const Table = () => {
   const API_URL = process.env.REACT_APP_API;
   const [coins, setCoins] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [newAmount, setNewAmount] = useState("");
-  const { userId, showModal, setShowModal } = useContext(AuthContext);
+  const { showModal, setShowModal } = useContext(AuthContext);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [action, setAction] = useState("");
   const [initialRows, setInitialRows] = useState([]);
 
   useEffect(() => {
-    getCoins();
-  }, [initialRows]);
+    let storedUserID = localStorage.getItem("pie-bit-user-id");
+    storedUserID = R.replace(/^"|"$/g, "", storedUserID);
+    if (storedUserID) {
+      getCoins(storedUserID);
+    }
+  }, []);
 
-  const getCoins = () => {
+  const getCoins = (userId) => {
     fetch(`${API_URL}/coins/${userId}`)
-      // fetch(`${API_URL}/coins/6550aef4bff6ff1f42769fbd`)
       .then((res) => res.json())
       .then((data) => {
         setCoins(data);
-        const newInitialRows = coins.map((coin) => {
+        const newInitialRows = data.map((coin) => {
           return createData(coin._id, coin.name, coin.ticker, coin.amount);
         });
         setInitialRows(newInitialRows);
@@ -44,6 +48,9 @@ const Table = () => {
   };
 
   const myTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
     components: {
       MuiDataGrid: {
         styleOverrides: {

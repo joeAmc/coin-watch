@@ -12,15 +12,19 @@ const Nav = () => {
       <nav className="navbar">
         <NavLink to="/portfoglio" className="nav-icon" activeClassName="active">
           <AiOutlinePieChart />
+          <h5>chart</h5>
         </NavLink>
         <NavLink to="/add" className="nav-icon" activeClassName="active">
           <GoPlusCircle />
+          <h5>add</h5>
         </NavLink>
         <NavLink to="/update" className="nav-icon" activeClassName="active">
           <BsWrenchAdjustableCircle />
+          <h5>edit</h5>
         </NavLink>
         <NavLink to="/" className="nav-icon" activeClassName="active">
           <CgProfile />
+          <h5>auth</h5>
         </NavLink>
       </nav>
     </div>

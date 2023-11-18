@@ -19,27 +19,22 @@ const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
     // navigate(`/add`);
   };
 
-  console.log("amount", amount);
-  // console.log("name", name);
-
   return (
     <>
       {/* <div className={`modal ${backgroundColor}`}> */}
       <div className={`modal success`}>
         <div className="modal-info">
           <p>
-            {action === "update"
+            {action === "update" || action === "add"
               ? `Confirm ${amount} units of ${name}?`
               : `Are you sure you want to delete ${amount} units of ${name}?`}
           </p>
         </div>
         <div className="modal-btns">
-          <button className="modal-close-btn" onClick={cancelModalHandler}>
+          <button className="btn-secondary" onClick={cancelModalHandler}>
             Cancel
           </button>
-          <button className="modal-add-btn" onClick={addModalHandler}>
-            Confirm
-          </button>
+          <button onClick={addModalHandler}>Confirm</button>
         </div>
         {/* <div className="modal-alert" onClick={closeAlertHandler}>
           <RxCrossCircled />

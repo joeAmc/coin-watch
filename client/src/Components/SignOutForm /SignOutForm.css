@@ -8,3 +8,26 @@
   width: 90%;
   transform: translate(-50%, -50%);
 }
+
+.signout-btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signout-btns button {
+  max-width: 200px;
+  margin: 10px;
+}
+/* 
+#root > div > div > div.signout-container > div > button:nth-child(2) {
+  background-color: var(--dark);
+  background-image: unset;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+#root > div > div > div.signout-container > div > button:nth-child(2):hover {
+  border: 1px solid var(--primary-hover);
+  color: var(--primary-hover);
+  transition: none;
+} */

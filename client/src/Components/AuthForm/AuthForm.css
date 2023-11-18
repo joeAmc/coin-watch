@@ -28,4 +28,5 @@
   margin-top: 8px;
   color: var(--light);
   cursor: pointer;
+  text-align: start;
 }

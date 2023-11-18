@@ -12,12 +12,12 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState("");
 
-  // useEffect(() => {
-  //   const user = localStorage.getItem("pie-bit-user");
-  //   if (user) {
-  //     setLoggedIn(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const user = localStorage.getItem("pie-bit-user");
+    if (user) {
+      setLoggedIn(true);
+    }
+  }, []);
 
   return (
     <div className="App">

@@ -10,17 +10,25 @@
   bottom: 0;
   width: -webkit-fill-available;
   z-index: 1;
-  padding: 20px 32px;
+  padding: 20px 24px;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
 }
 
 .nav-icon {
-  font-size: 50px;
+  font-size: 40px;
   color: var(--light-alt);
   cursor: pointer;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-icon h5 {
+  text-align: center;
+  margin-top: 4px;
+  font-size: 13px;
 }
 
 .nav-icon.active {

@@ -1,16 +1,29 @@
 import React from "react";
 import { useState, useContext } from "react";
 import "./SignOutForm.css";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
-// import AuthAlert from "../AuthAlert/AuthAlert";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext";
 
 const SignOutForm = () => {
+  const navigate = useNavigate();
+  const { setLoggedIn } = useContext(AuthContext);
+
+  const signOutHandler = () => {
+    localStorage.removeItem("pie-bit-user");
+    setLoggedIn(false);
+  };
+
+  const cancelSignOutHandler = () => {
+    navigate("/portfoglio");
+  };
   return (
     <>
       <div className="signout-container">
-        <div>
-          <button type="submit">Sign out</button>
-          <button type="submit">Go back</button>
+        <div className="signout-btns">
+          <button onClick={signOutHandler}>Sign out</button>
+          <button className="btn-secondary" onClick={cancelSignOutHandler}>
+            Go back
+          </button>
         </div>
       </div>
     </>

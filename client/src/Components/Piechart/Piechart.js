@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import "./Piechart.css";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { AuthContext } from "../../AuthContext";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import * as R from "ramda";
 
 const Piechart = () => {
   const API_SECRET = process.env.REACT_APP_API_SECRET;
@@ -12,16 +13,26 @@ const Piechart = () => {
   const [data, setData] = useState([]);
   const [coins, setCoins] = useState([]);
   const [userCoinAmounts, setUserCoinAmounts] = useState([]);
-  const { userId } = useContext(AuthContext);
+  const { userId, setUserId } = useContext(AuthContext);
   const API_URL = process.env.REACT_APP_API;
 
+  const darkTheme = createTheme({
+    palette: {
+      // mode: "dark",
+    },
+    spacing: 4,
+  });
+
   useEffect(() => {
-    getCoins();
+    let storedUserID = localStorage.getItem("pie-bit-user-id");
+    storedUserID = R.replace(/^"|"$/g, "", storedUserID);
+    if (storedUserID) {
+      getCoins(storedUserID);
+    }
   }, []);
 
-  const getCoins = () => {
-    fetch(`http://localhost:4000/coins/${userId}`)
-      // fetch(`http://localhost:4000/coins/6550aef4bff6ff1f42769fbd`)
+  const getCoins = (userid) => {
+    fetch(`http://localhost:4000/coins/${userid}`)
       .then((res) => res.json())
       .then((data) => {
         const userCoins = data.map((coin) => coin.name.toLowerCase());
@@ -36,7 +47,6 @@ const Piechart = () => {
 
   useEffect(() => {
     const fetchCoinData = async (coin) => {
-      // if (responseArray.forEach((item) => item.coin !== coin)) {
       try {
         const requestOptions = {
           method: "GET",
@@ -94,7 +104,6 @@ const Piechart = () => {
     margin: { top: 0, right: 0, bottom: 0, left: 0 },
     width: 280,
     height: 275,
-    // legend: { hidden: true },
   };
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -105,7 +114,7 @@ const Piechart = () => {
   const customTooltipFormatter = (params) => {
     const value = parseFloat(params.value) || 0;
     const formattedValue = currencyFormatter.format(value);
-    return `${params.label}: ${formattedValue}`;
+    return formattedValue;
   };
 
   const totalPortfolioValue = data.reduce(
@@ -114,7 +123,7 @@ const Piechart = () => {
   );
 
   return (
-    <>
+    <ThemeProvider theme={darkTheme}>
       <div
         className="piechart-container"
         style={{
@@ -125,13 +134,6 @@ const Piechart = () => {
         }}
       >
         <PieChart
-          slotProps={{
-            legend: {
-              direction: "row",
-              // position: { vertical: "top", horizontal: "middle" },
-              padding: 0,
-            },
-          }}
           className="custom-pie-chart"
           series={[
             {
@@ -148,12 +150,16 @@ const Piechart = () => {
           // tooltip={{
           //   valueFormatter: customTooltipFormatter,
           // }}
+          // tooltip={{ trigger: "item" }}
           sx={{
             [`& .${pieArcLabelClasses.root}`]: {
               fill: "white",
               fontWeight: "regular",
-              fontSize: 16,
+              fontSize: 12,
               fontFamily: "'Fira Sans', sans-serif",
+            },
+            "& .MuiPieArc-root": {
+              stroke: "white",
             },
           }}
           {...sizing}
@@ -162,7 +168,8 @@ const Piechart = () => {
       <h4 className="total-value">
         Total Value: {currencyFormatter.format(totalPortfolioValue)}
       </h4>
-    </>
+      {/* </> */}
+    </ThemeProvider>
   );
 };
 
