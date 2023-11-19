@@ -6,14 +6,19 @@
   fill: white !important;
 }
 
-.total-value {
+.total-value h4 {
   text-align: center;
   margin-top: 10px;
   font-size: 16px;
+  width: 90%;
 }
 
-.css-veltv6-MuiPieArc-root {
-  /* Your styles here */
+.total-value {
+  display: flex;
+  justify-content: center;
+}
+
+/* .css-veltv6-MuiPieArc-root {
   stroke: #fdfafa;
   color: red !important;
-}
+} */

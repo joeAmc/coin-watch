@@ -12,7 +12,9 @@ const Auth = () => {
 
   return (
     <div>
-      {!loggedIn ? signUp ? <h1>Sign up</h1> : <h1>Log in</h1> : null}
+      <div className="header-container">
+        {!loggedIn ? signUp ? <h1>Sign up</h1> : <h1>Log in</h1> : null}
+      </div>
       <Nav />
       {!loggedIn ? <AuthForm /> : <SignOutForm />}
     </div>

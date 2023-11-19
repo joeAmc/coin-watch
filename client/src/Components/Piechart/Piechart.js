@@ -147,10 +147,6 @@ const Piechart = () => {
               valueFormatter: customTooltipFormatter,
             },
           ]}
-          // tooltip={{
-          //   valueFormatter: customTooltipFormatter,
-          // }}
-          // tooltip={{ trigger: "item" }}
           sx={{
             [`& .${pieArcLabelClasses.root}`]: {
               fill: "white",
@@ -165,10 +161,9 @@ const Piechart = () => {
           {...sizing}
         />
       </div>
-      <h4 className="total-value">
-        Total Value: {currencyFormatter.format(totalPortfolioValue)}
-      </h4>
-      {/* </> */}
+      <div className="total-value">
+        <h4>Total Value: {currencyFormatter.format(totalPortfolioValue)}</h4>
+      </div>
     </ThemeProvider>
   );
 };

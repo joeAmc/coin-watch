@@ -24,7 +24,9 @@ const UpdateCrypto = () => {
   }
   return (
     <div>
-      <h1>Edit</h1>
+      <div className="header-container">
+        <h1>Edit</h1>
+      </div>
       <Table />
       <Nav />
     </div>

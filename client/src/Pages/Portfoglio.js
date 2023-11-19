@@ -26,7 +26,9 @@ const Portfoglio = () => {
   }
   return (
     <>
-      <h1>Split</h1>
+      <div className="header-container">
+        <h1>Split</h1>
+      </div>
       <Piechart />
       <Nav />
     </>

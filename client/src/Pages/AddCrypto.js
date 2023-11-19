@@ -24,8 +24,10 @@ const AddCrypto = () => {
   }
 
   return (
-    <div>
-      <h1>Add Crypto</h1>
+    <div className="">
+      <div className="header-container">
+        <h1>Add Crypto</h1>
+      </div>
       <AddCryptoForm />
       <Nav />
     </div>
