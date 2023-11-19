@@ -2,10 +2,6 @@
   width: unset !important;
 }
 
-.custom-pie-chart {
-  fill: white !important;
-}
-
 .total-value h4 {
   text-align: center;
   margin-top: 10px;
@@ -17,8 +13,3 @@
   display: flex;
   justify-content: center;
 }
-
-/* .css-veltv6-MuiPieArc-root {
-  stroke: #fdfafa;
-  color: red !important;
-} */

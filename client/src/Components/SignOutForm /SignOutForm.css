@@ -6,6 +6,7 @@
   top: 45%;
   left: 50%;
   width: 90%;
+  max-width: 659px;
   transform: translate(-50%, -50%);
 }
 
