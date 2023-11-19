@@ -25,7 +25,7 @@ const AddCryptoForm = () => {
   const API_URL = process.env.REACT_APP_API;
 
   let storedUserID = localStorage.getItem("pie-bit-user-id");
-  storedUserID = R.replace(/^"|"$/g, "", storedUserID);
+  storedUserID = storedUserID ? R.replace(/^"|"$/g, "", storedUserID) : null;
 
   useEffect(() => {
     const fetchCoinIds = async () => {

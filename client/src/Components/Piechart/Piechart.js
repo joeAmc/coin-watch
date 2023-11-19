@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import "./Piechart.css";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { AuthContext } from "../../AuthContext";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import * as R from "ramda";
 
 const Piechart = () => {
@@ -15,13 +14,6 @@ const Piechart = () => {
   const [userCoinAmounts, setUserCoinAmounts] = useState([]);
   const { userId, setUserId } = useContext(AuthContext);
   const API_URL = process.env.REACT_APP_API;
-
-  const darkTheme = createTheme({
-    palette: {
-      // mode: "dark",
-    },
-    spacing: 4,
-  });
 
   useEffect(() => {
     let storedUserID = localStorage.getItem("pie-bit-user-id");
@@ -123,7 +115,7 @@ const Piechart = () => {
   );
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <>
       <div
         className="piechart-container"
         style={{
@@ -164,7 +156,7 @@ const Piechart = () => {
       <div className="total-value">
         <h4>Total Value: {currencyFormatter.format(totalPortfolioValue)}</h4>
       </div>
-    </ThemeProvider>
+    </>
   );
 };
 
