@@ -141,12 +141,12 @@ const AddCryptoForm = () => {
   return (
     <div className="new-crypto-form-container">
       <form onSubmit={fetchTicker}>
-        <p>
+        <div>
           <label>Crypto Name</label>
           <Box>
             <FormControl sx={{ minWidth: "100%" }}>
               <Select
-                // value={age}
+                value={name}
                 onChange={handleNameChange}
                 displayEmpty
                 inputProps={{
@@ -174,19 +174,17 @@ const AddCryptoForm = () => {
                   },
                 }}
               >
-                {/* <MenuItem value="">
-                  <em>None</em>
-                </MenuItem> */}
                 {coinData.map((coin) => (
-                  <MenuItem value={coin.id}>{coin.name}</MenuItem>
+                  <MenuItem key={coin.id} value={coin.id}>
+                    {coin.name}
+                  </MenuItem>
                 ))}
               </Select>
-              {/* <FormHelperText>Without label</FormHelperText> */}
             </FormControl>
           </Box>
-        </p>
+        </div>
         <br />
-        <p>
+        <div>
           <label>Amount</label>
           <input
             type="text"
@@ -194,7 +192,7 @@ const AddCryptoForm = () => {
             onChange={handleAmountChange}
             required
           />
-        </p>
+        </div>
         <br />
         <button>Add Crypto</button>
       </form>

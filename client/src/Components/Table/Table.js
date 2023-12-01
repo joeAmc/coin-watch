@@ -22,6 +22,12 @@ const Table = () => {
   const [action, setAction] = useState("");
   const [initialRows, setInitialRows] = useState([]);
 
+  // useEffect(() => {
+  //   fetch(`${API_URL}/coins/6550aef4bff6ff1f42769fbd`)
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data));
+  // }, []);
+
   useEffect(() => {
     let storedUserID = localStorage.getItem("pie-bit-user-id");
     storedUserID = R.replace(/^"|"$/g, "", storedUserID);

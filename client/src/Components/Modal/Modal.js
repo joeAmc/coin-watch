@@ -1,22 +1,17 @@
 import React from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../AuthContext";
-import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
 const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
-  const navigate = useNavigate();
   const { showModal, setShowModal } = useContext(AuthContext);
 
   const cancelModalHandler = () => {
     setShowModal(false);
-    console.log("cancelModalHandler");
   };
 
   const addModalHandler = () => {
-    console.log("confirming!");
     onConfirm(); // Call the parent's callback function
-    // navigate(`/add`);
   };
 
   return (
