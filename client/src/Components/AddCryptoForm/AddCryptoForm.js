@@ -142,10 +142,11 @@ const AddCryptoForm = () => {
     <div className="new-crypto-form-container">
       <form onSubmit={fetchTicker}>
         <div>
-          <label>Crypto Name</label>
+          <label htmlFor="cryptoName">Crypto Name</label>
           <Box>
             <FormControl sx={{ minWidth: "100%" }}>
               <Select
+                id="cryptoName"
                 value={name}
                 onChange={handleNameChange}
                 displayEmpty
@@ -185,8 +186,9 @@ const AddCryptoForm = () => {
         </div>
         <br />
         <div>
-          <label>Amount</label>
+          <label htmlFor="amount">Amount</label>
           <input
+            id="amount"
             type="text"
             value={amount}
             onChange={handleAmountChange}
