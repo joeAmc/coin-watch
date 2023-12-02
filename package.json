@@ -1,0 +1,24 @@
+{
+  "name": "-mern-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-server": "cd api && npm install",
+    "start-server": "cd api && node server.js",
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
+    "start-client": "cd client && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joeAmc/vibe-check.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joeAmc/vibe-check/issues"
+  },
+  "homepage": "https://github.com/joeAmc/vibe-check#readme"
+}
