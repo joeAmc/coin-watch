@@ -62,7 +62,8 @@
     "fast-text-encoding": "^1.0.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
   },
   "msw": {
     "workerDirectory": "public"

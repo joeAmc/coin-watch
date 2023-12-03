@@ -24,7 +24,7 @@ const Piechart = () => {
   }, []);
 
   const getCoins = (userid) => {
-    fetch(`http://localhost:4000/coins/${userid}`)
+    fetch(`${API_URL}/coins/${userid}`)
       .then((res) => res.json())
       .then((data) => {
         const userCoins = data.map((coin) => coin.name.toLowerCase());
