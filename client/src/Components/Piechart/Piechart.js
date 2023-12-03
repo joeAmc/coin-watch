@@ -1,18 +1,13 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./Piechart.css";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { AuthContext } from "../../AuthContext";
 import * as R from "ramda";
 
 const Piechart = () => {
-  const API_SECRET = process.env.REACT_APP_API_SECRET;
-  const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const [data, setData] = useState([]);
   const [coins, setCoins] = useState([]);
   const [userCoinAmounts, setUserCoinAmounts] = useState([]);
-  const { userId, setUserId } = useContext(AuthContext);
   const API_URL = process.env.REACT_APP_API;
 
   useEffect(() => {

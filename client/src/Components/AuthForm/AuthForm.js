@@ -22,7 +22,7 @@ const Auth = () => {
     showAlert,
     setShowAlert,
     setUserId,
-    userId,
+    // userId,
   } = useContext(AuthContext);
 
   const API_URL = process.env.REACT_APP_API;

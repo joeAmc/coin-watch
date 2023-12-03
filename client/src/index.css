@@ -13,6 +13,7 @@
   --transition: all 400ms ease;
   --border-radius: 12px;
   --border-radius-small: 4px;
+  --loader-color: #eb4760;
 }
 
 * {
@@ -146,4 +147,11 @@ form {
 
 .header-container h1 {
   width: 90%;
+}
+
+.loader {
+  position: absolute;
+  left: calc(50% - (100px / 2));
+  top: calc(50% - (100px / 2));
+  z-index: 100;
 }

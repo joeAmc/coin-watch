@@ -55,33 +55,32 @@ export const handlers = [
     );
   }),
 
-  rest.get("http://localhost:4000/coins/6550aef4bff6ff1f42769fbd", function*(
-    req,
-    res,
-    ctx
-  ) {
-    console.log("coins fetched!");
-    yield res(
-      ctx.json([
-        {
-          _id: "65270d9f257cd0a7b40daa96",
-          name: "Ethereum Classic",
-          ticker: "etc",
-          user_id: "65270cdd257cd0a7b40daa8a",
-          amount: 200,
-          __v: 0,
-        },
-        {
-          _id: "65270e70257cd0a7b40daa9b",
-          name: "binance-coin",
-          ticker: "bnb",
-          user_id: "65270cdd257cd0a7b40daa8a",
-          amount: 10,
-          __v: 0,
-        },
-      ])
-    );
-  }),
+  rest.get(
+    "http://localhost:4000/coins/6550aef4bff6ff1f42769fbd",
+    function* (req, res, ctx) {
+      console.log("coins fetched!");
+      yield res(
+        ctx.json([
+          {
+            _id: "65270d9f257cd0a7b40daa96",
+            name: "Ethereum Classic",
+            ticker: "etc",
+            user_id: "65270cdd257cd0a7b40daa8a",
+            amount: 200,
+            __v: 0,
+          },
+          {
+            _id: "65270e70257cd0a7b40daa9b",
+            name: "binance-coin",
+            ticker: "bnb",
+            user_id: "65270cdd257cd0a7b40daa8a",
+            amount: 10,
+            __v: 0,
+          },
+        ])
+      );
+    }
+  ),
   rest.put(
     "http://localhost:4000/coin/update/65270d9f257cd0a7b40daa96",
     (req, res, ctx) => {
@@ -99,4 +98,13 @@ export const handlers = [
       return res(ctx.json({ message: "Deleted successfully" }));
     }
   ),
+  rest.post("http://localhost:4000/login", (req, res, ctx) => {
+    console.log("login req made!");
+    return res(
+      ctx.json({
+        email: "joe+1@gmail.com",
+        password: "12345",
+      })
+    );
+  }),
 ];
