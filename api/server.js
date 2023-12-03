@@ -10,6 +10,7 @@ const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
+console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
 console.log("process.env.JWT_SECRET", process.env.JWT_SECRET);
 
 const app = express();
