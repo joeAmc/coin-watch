@@ -10,9 +10,6 @@ const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
-console.log("process.env.MONGODB_URI", process.env.MONGODB_URI);
-console.log("process.env.JWT_SECRET", process.env.JWT_SECRET);
-
 const app = express();
 
 app.use(express.json());
@@ -44,52 +41,10 @@ app.post("/coin/new", async (req, res) => {
   }
 });
 
-// const findUserIdByEmail = async (email) => {
-//   try {
-//     const user = await User.findOne({ email });
-//     if (user) {
-//       return user._id;
-//     } else {
-//       return null; // User not found
-//     }
-//   } catch (error) {
-//     console.error(`Error finding user: ${error}`);
-//     throw error;
-//   }
-// };
-
-// app.post("/coin/new", async (req, res) => {
-//   const { email } = req.body;
-
-//   console.log("email", email);
-//   try {
-//     const userId = await findUserIdByEmail(email);
-
-//     if (!userId) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     const coin = new Coin({
-//       ticker: req.body.ticker,
-//       amount: req.body.amount,
-//       name: req.body.name,
-//       user_id: userId,
-//     });
-
-//     await coin.save();
-//     res.status(201).json(coin);
-//     console.log("Coin successfully saved");
-//   } catch (error) {
-//     console.error(`Failed to create coin: ${error}`);
-//     res.status(500).json({ message: "Failed to add coin" });
-//   }
-// });
-
 app.get("/coins/:userId", async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    // Query the database to find all coins associated with the user
     const coins = await Coin.find({ user_id: userId });
 
     // Check if the user has any coins
@@ -115,18 +70,14 @@ app.put("/coin/update/:coinId", async (req, res) => {
   const newAmount = req.body.amount;
 
   try {
-    // Find the coin by its ID
     const coin = await Coin.findById(coinId);
 
-    // Check if the coin exists
     if (!coin) {
       return res.status(404).json({ message: "Coin not found" });
     }
 
-    // Update the coin's amount
     coin.amount = newAmount;
 
-    // Save the updated coin
     await coin.save();
 
     res.json(coin);
