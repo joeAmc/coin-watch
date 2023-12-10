@@ -11,7 +11,7 @@ const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
   };
 
   const addModalHandler = () => {
-    onConfirm(); // Call the parent's callback function
+    onConfirm();
   };
 
   return (

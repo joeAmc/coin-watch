@@ -87,6 +87,25 @@ app.put("/coin/update/:coinId", async (req, res) => {
   }
 });
 
+app.post("/check-crypto", async (req, res) => {
+  const { name } = req.body;
+
+  try {
+    const existingCrypto = await Coin.findOne({
+      $or: [{ name }],
+    });
+
+    if (existingCrypto) {
+      return res.json({ exists: true });
+    }
+
+    res.json({ exists: false });
+  } catch (error) {
+    console.error(`Failed to check crypto: ${error}`);
+    res.status(500).json({ message: "Failed to check crypto" });
+  }
+});
+
 app.post("/signup", async (req, res) => {
   const { email, password } = req.body;
   const user = new User({ email, password });

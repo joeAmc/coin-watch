@@ -160,6 +160,8 @@ const Table = () => {
           ...prevRowModesModel,
           [id]: { mode: GridRowModes.View },
         }));
+        const updatedRows = initialRows.filter((row) => row.id !== id);
+        setInitialRows(updatedRows);
       } else {
         console.error("Failed to delete coin amount");
       }

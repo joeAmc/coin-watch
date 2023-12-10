@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import Modal from "../Modal/Modal";
-import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./AddCryptoForm.css";
 import * as R from "ramda";
+import Alert from "../Alert/Alert";
 
 const AddCryptoForm = () => {
   const [ticker, setTicker] = useState("");
@@ -17,11 +16,12 @@ const AddCryptoForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [coinData, setCoinData] = useState([]);
-  const { showModal, setShowModal, userId } = useContext(AuthContext);
+  const { showModal, setShowModal } = useContext(AuthContext);
+  const [showAlert, setShowAlert] = useState(false);
   const [action, setAction] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertColor, setAlertColor] = useState("");
 
-  const API_SECRET = process.env.REACT_APP_API_SECRET;
-  const API_ACCESS = process.env.REACT_APP_API_ACCESS;
   const API_URL = process.env.REACT_APP_API;
 
   let storedUserID = localStorage.getItem("pie-bit-user-id");
@@ -60,7 +60,7 @@ const AddCryptoForm = () => {
 
   const fetchTicker = async (event) => {
     event.preventDefault();
-    // setLoading(true);
+    setLoading(true);
 
     try {
       const requestOptions = {
@@ -95,8 +95,29 @@ const AddCryptoForm = () => {
     setAmount(event.target.value);
   };
 
+  const checkCryptoExists = async () => {
+    try {
+      const response = await fetch(`${API_URL}/check-crypto`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      });
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error(`Failed to check crypto: ${error}`);
+      setAlertMessage(`Failed to check crypto: ${error}`);
+      setAlertColor("fail");
+      // setSuccess(false);
+      setShowAlert(true);
+      setLoading(false);
+      return false;
+    }
+  };
+
   const handleSubmit = async () => {
-    // event.preventDefault();
     setLoading(true);
 
     const newCryptoData = {
@@ -105,6 +126,16 @@ const AddCryptoForm = () => {
       amount: amount,
       user_id: storedUserID,
     };
+
+    const cryptoExists = await checkCryptoExists();
+    if (cryptoExists) {
+      console.error("User already has added this crypto");
+      setAlertMessage(`${name} already added`);
+      setAlertColor("fail");
+      setShowAlert(true);
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_URL}/coin/new`, {
@@ -117,25 +148,30 @@ const AddCryptoForm = () => {
 
       if (response.ok) {
         console.log("New crypto added successfully!");
-        // setAlertMessage("New crypto added!");
-        // setAlertClass("success");
+        console.log(`${name} added successfully!`);
+        setAlertMessage(`${name} added successfully!`);
+        setAlertColor("success");
       } else {
         console.error("Failed to add crypto");
-        // setAlertMessage("Failed to add crypto");
-        // setAlertClass("fail");
+        setAlertColor("fail");
+        setAlertMessage("Failed to add crypto");
       }
     } catch (error) {
       console.error(`Failed to add crypto" : ${error}`);
-      //   setAlertMessage(`Failed to add crypto : ${error}`);
-      //   setAlertClass("fail");
+      setAlertColor("fail");
+      setAlertMessage(`Failed to add crypto : ${error}`);
     }
-    // setShowAlert(true);
+    setShowAlert(true);
     setLoading(false);
   };
 
   const handleConfirmModal = async () => {
     await handleSubmit();
     setShowModal(false);
+  };
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -175,7 +211,7 @@ const AddCryptoForm = () => {
                   },
                 }}
               >
-                {coinData.map((coin) => (
+                {coinData.map((coin, i) => (
                   <MenuItem key={coin.id} value={coin.id}>
                     {coin.name}
                   </MenuItem>
@@ -204,6 +240,13 @@ const AddCryptoForm = () => {
           amount={amount}
           action={action}
           onConfirm={handleConfirmModal}
+        />
+      )}
+      {showAlert && (
+        <Alert
+          message={alertMessage}
+          onClose={handleCloseAlert}
+          color={alertColor}
         />
       )}
     </div>
