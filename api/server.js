@@ -87,7 +87,7 @@ app.put("/coin/update/:coinId", async (req, res) => {
   }
 });
 
-app.post("/check-crypto", async (req, res) => {
+app.post("/coin/check-coin", async (req, res) => {
   const { name } = req.body;
 
   try {

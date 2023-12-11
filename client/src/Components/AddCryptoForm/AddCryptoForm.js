@@ -97,7 +97,7 @@ const AddCryptoForm = () => {
 
   const checkCryptoExists = async () => {
     try {
-      const response = await fetch(`${API_URL}/check-crypto`, {
+      const response = await fetch(`${API_URL}/coin/check-coin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
