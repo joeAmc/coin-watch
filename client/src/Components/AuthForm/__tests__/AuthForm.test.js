@@ -45,8 +45,6 @@ describe("Auth form", () => {
     expect(logInLink).toBeInTheDocument();
 
     fireEvent.click(signUpLink);
-
-    screen.debug();
   });
 
   it("submits the form with valid email and password", async () => {
@@ -64,16 +62,6 @@ describe("Auth form", () => {
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(logInButton);
-
-    // await waitFor(() => {});
-
-    // You might want to add assertions to check for loading state or API requests.
-    // For example, expect loading spinner to be visible or expect a specific API call.
-    // These assertions will depend on the exact behavior you want to test.
-    // Use `waitFor` from RTL to await asynchronous behavior if needed.
-    // await waitFor(() => {})
-    // Add assertions here to check for expected behavior after form submission.
-    // });
   });
 
   // Test other scenarios such as sign-up mode, error handling, API requests, etc.

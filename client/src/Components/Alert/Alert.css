@@ -1,5 +1,5 @@
 .alert {
-  padding: 18px;
+  padding: 12px;
   position: absolute;
   left: 50%;
   width: 90%;
@@ -7,7 +7,7 @@
   transform: translate(-50%, -50%);
   z-index: 3;
   border: none;
-  top: 8.5rem;
+  top: 7.5rem;
   border-radius: 8px;
   background-image: linear-gradient(to bottom, var(--dark-alt), rgb(39 40 59));
 }

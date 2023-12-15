@@ -165,3 +165,15 @@ app.get("/users", async (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
+
+// Coin-related routes
+// app.use("/coin/update/:coinId", coinRoutes);
+// app.use("/coin/delete/:id", coinRoutes);
+// app.use("/coin/check-coin", coinRoutes);
+// app.use("/coins/:userId", coinRoutes);
+// app.use("/coin/new", coinRoutes);
+
+// User-related routes
+// app.use("/signup", userRoutes);
+// app.use("/login", userRoutes);
+// app.use("/check-user", userRoutes);

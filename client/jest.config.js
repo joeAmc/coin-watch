@@ -9,11 +9,13 @@ module.exports = {
     "^@mui/x-charts/(?!(.*\\.(js|jsx)))":
       "<rootDir>/node_modules/react-scripts/config/jest/babelTransform.js",
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!@mui/x-charts/PieChart), '/@mui/x-charts/PieChart/'",
+  ],
   moduleNameMapper: {
     "\\.(css|less)$": "<rootDir>/cssMock.js",
   },
   testEnvironmentOptions: {
     customExportConditions: [""],
   },
-  testTimeout: 30000,
 };

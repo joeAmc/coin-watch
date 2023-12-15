@@ -86,7 +86,6 @@ const Table = () => {
     });
   };
 
-  // handle amount update
   const handleModalSubmit = async () => {
     if (action === "delete") {
       await handleDeleteSubmit(id);

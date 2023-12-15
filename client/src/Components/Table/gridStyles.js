@@ -3,9 +3,7 @@ export const gridStyles = {
   border: 2,
   color: "white",
   borderColor: "#61759b",
-  "& .MuiDataGrid-row:hover": {
-    // color: "#61759b",
-  },
+  "& .MuiDataGrid-row:hover": {},
   "& .MuiDataGrid-row--editing .MuiDataGrid-cell": {
     backgroundColor: "#131922",
     color: "white",
@@ -43,11 +41,4 @@ export const gridStyles = {
   "& .MuiDataGrid-cellContent": {
     fontSize: "16px",
   },
-
-  // "& .MuiDataGrid-virtualScrollerContent": {
-  //   height: "100px",
-  // },
-  // "& .css-1kwdphh-MuiDataGrid-virtualScrollerContent": {
-  //   height: "100px!important",
-  // },
 };
