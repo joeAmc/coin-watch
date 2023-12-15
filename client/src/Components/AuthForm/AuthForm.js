@@ -5,7 +5,6 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { AuthContext } from "../../AuthContext";
 import Alert from "../Alert/Alert";
-import bcrypt from "bcryptjs-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ const Auth = () => {
   const [alertColor, setAlertColor] = useState("");
   const { setLoggedIn, setUserId } = useContext(AuthContext);
 
-  const saltRounds = 10;
   const API_URL = process.env.REACT_APP_API;
 
   const handleEmailChange = (event) => {
@@ -75,67 +73,53 @@ const Auth = () => {
       }
     }
 
-    bcrypt.hash(password, saltRounds, async (err, hash) => {
-      if (err) {
-        console.error("Failed to hash password:", err);
-      } else {
-        const newUserData = {
-          email: email,
-          password: hash,
-        };
-        try {
-          const endpoint = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
-          const response = await fetch(endpoint, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newUserData),
-          });
-
-          const json = await response.json();
-
-          if (response.ok) {
-            // if (signUp) {
-            //   setAlertMessage("Welcome to Port Pal");
-            //   // setLoggedIn(true);
-            // } else {
-            //   setAlertMessage("Welcome back");
-            // }
-            // setShowAlert(true);
-            // setAlertColor("success");
-            setLoggedIn(true);
-            setUserId(json._id);
-            console.log("json._id", json._id);
-            navigate("/portfoglio");
-            localStorage.setItem("pie-bit-user", JSON.stringify(json));
-            localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));
-          } else {
-            console.error("Failed to sign up or log in");
-            setAlertMessage(signUp ? "Failed to sign up" : "Failed to log in");
-            setAlertColor("fail");
-            setShowAlert(true);
-          }
-        } catch (error) {
-          console.error(
-            `${signUp ? "Failed to sign up" : "Failed to log in"}: ${error}`
-          );
-          setAlertMessage(
-            `${signUp ? "Failed to sign up" : "Failed to log in"}: ${error}`
-          );
-          setAlertColor("fail");
-          setShowAlert(true);
-        }
-
-        // Save 'newUser' to the database
-        // ...
-      }
-    });
-
     const newUserData = {
       email: email,
       password: password,
     };
+    try {
+      const endpoint = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUserData),
+      });
+
+      const json = await response.json();
+
+      if (response.ok) {
+        // if (signUp) {
+        //   setAlertMessage("Welcome to Port Pal");
+        //   // setLoggedIn(true);
+        // } else {
+        //   setAlertMessage("Welcome back");
+        // }
+        // setShowAlert(true);
+        // setAlertColor("success");
+        setLoggedIn(true);
+        setUserId(json._id);
+        console.log("json._id", json._id);
+        navigate("/portfoglio");
+        localStorage.setItem("pie-bit-user", JSON.stringify(json));
+        localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));
+      } else {
+        console.error("Failed to sign up or log in");
+        setAlertMessage(signUp ? "Failed to sign up" : "Failed to log in");
+        setAlertColor("fail");
+        setShowAlert(true);
+      }
+    } catch (error) {
+      console.error(
+        `${signUp ? "Failed to sign up" : "Failed to log in"}: ${error}`
+      );
+      setAlertMessage(
+        `${signUp ? "Failed to sign up" : "Failed to log in"}: ${error}`
+      );
+      setAlertColor("fail");
+      setShowAlert(true);
+    }
 
     setLoading(false);
   };
