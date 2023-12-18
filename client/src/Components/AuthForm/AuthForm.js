@@ -1,15 +1,14 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import "./AuthForm.css";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { AuthContext } from "../../AuthContext";
 import Alert from "../Alert/Alert";
+import validator from "validator";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const signUp = searchParams.get("mode") === "signup";
@@ -17,18 +16,10 @@ const Auth = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertColor, setAlertColor] = useState("");
   const { setLoggedIn, setUserId } = useContext(AuthContext);
+  const email = useRef();
+  const password = useRef();
 
   const API_URL = process.env.REACT_APP_API;
-
-  console.log("API_URL", API_URL);
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
 
   const checkUserExists = async () => {
     try {
@@ -55,7 +46,18 @@ const Auth = () => {
     event.preventDefault();
     setLoading(true);
 
-    if (password.length < 8) {
+    const enteredEmail = email.current.value;
+    const enteredPassword = password.current.value;
+
+    if (!validator.isEmail(enteredEmail)) {
+      setAlertMessage("Please enter a valid Email");
+      setAlertColor("fail");
+      setShowAlert(true);
+      setLoading(false);
+      return;
+    }
+
+    if (enteredPassword.length < 8) {
       setAlertMessage("Password must be at least 8 characters long");
       setAlertColor("fail");
       setShowAlert(true);
@@ -76,8 +78,8 @@ const Auth = () => {
     }
 
     const newUserData = {
-      email: email,
-      password: password,
+      email: enteredEmail,
+      password: enteredPassword,
     };
     try {
       const endpoint = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
@@ -92,17 +94,8 @@ const Auth = () => {
       const json = await response.json();
 
       if (response.ok) {
-        // if (signUp) {
-        //   setAlertMessage("Welcome to Port Pal");
-        //   // setLoggedIn(true);
-        // } else {
-        //   setAlertMessage("Welcome back");
-        // }
-        // setShowAlert(true);
-        // setAlertColor("success");
         setLoggedIn(true);
         setUserId(json._id);
-        console.log("json._id", json._id);
         navigate("/portfoglio");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
         localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));
@@ -150,13 +143,7 @@ const Auth = () => {
         <form onSubmit={handleSubmit}>
           <p>
             <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              onChange={handleEmailChange}
-              required
-            />
+            <input id="email" type="email" name="email" ref={email} required />
           </p>
           <p>
             <label htmlFor="password">Password</label>
@@ -164,7 +151,7 @@ const Auth = () => {
               id="password"
               type="password"
               name="password"
-              onChange={handlePasswordChange}
+              ref={password}
               required
             />
           </p>
