@@ -20,6 +20,8 @@ const Auth = () => {
 
   const API_URL = process.env.REACT_APP_API;
 
+  console.log("API_URL", API_URL);
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };

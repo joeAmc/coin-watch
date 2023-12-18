@@ -7,8 +7,6 @@ import { RotatingLines } from "react-loader-spinner";
 const Portfoglio = () => {
   const loggedIn = useRequireAuth();
 
-  console.log("loggedIn: ", loggedIn);
-
   if (!loggedIn) {
     return (
       <div className="loader">

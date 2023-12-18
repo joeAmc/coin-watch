@@ -7,8 +7,6 @@ const Alert = ({ message, onClose, color }) => {
     onClose();
   };
 
-  console.log("color: ", color);
-
   return (
     <>
       <div className={`alert`}>

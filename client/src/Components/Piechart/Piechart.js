@@ -50,7 +50,6 @@ const Piechart = () => {
         }
 
         const result = await response.json();
-        console.log("userCoinAmounts", userCoinAmounts[0]);
 
         setData((prevResponseArray) => {
           const updatedArray = prevResponseArray.filter(
