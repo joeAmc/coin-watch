@@ -14,7 +14,6 @@ router.post("/coin/new", async (req, res) => {
   try {
     await coin.save();
     res.status(201).json(coin);
-    console.log("coin successfully sent");
   } catch (error) {
     console.error(`Failed to create coin: ${error}`);
     res.status(500).json({ message: "Failed to add coin" });

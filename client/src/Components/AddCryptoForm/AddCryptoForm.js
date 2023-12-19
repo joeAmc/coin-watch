@@ -88,7 +88,6 @@ const AddCryptoForm = () => {
 
   const handleNameChange = (event) => {
     setName(event.target.value);
-    console.log("event.target.value", name);
   };
 
   const handleAmountChange = (event) => {
@@ -147,8 +146,6 @@ const AddCryptoForm = () => {
       });
 
       if (response.ok) {
-        console.log("New crypto added successfully!");
-        console.log(`${name} added successfully!`);
         setAlertMessage(`${name} added successfully!`);
         setAlertColor("success");
       } else {

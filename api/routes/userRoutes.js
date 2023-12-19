@@ -11,7 +11,6 @@ const createToken = (_id) => {
 };
 
 route.post("/signup", async (req, res) => {
-  console.log("signup route hit");
   const { email, password } = req.body;
   const user = new User({ email, password });
   try {
@@ -20,7 +19,6 @@ route.post("/signup", async (req, res) => {
     const token = createToken(user._id);
 
     res.status(201).json({ _id: user._id, token, email });
-    console.log("user successfully signed up");
   } catch (error) {
     console.error(`Failed to sign up user: ${error}`);
     res.status(500).json({ message: "Failed to sign up user" });
@@ -28,7 +26,6 @@ route.post("/signup", async (req, res) => {
 });
 
 route.post("/login", async (req, res) => {
-  console.log("login route hit");
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -37,7 +34,6 @@ route.post("/login", async (req, res) => {
     }
     const token = createToken(user._id);
     res.json({ token, email, _id: user._id });
-    console.log("user successfully logged in");
   } catch (error) {
     console.error(`Failed to log in user: ${error}`);
     res.status(500).json({ message: "Failed to log in user" });
