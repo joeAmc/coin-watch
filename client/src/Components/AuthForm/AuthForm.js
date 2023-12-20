@@ -21,27 +21,6 @@ const Auth = () => {
 
   const API_URL = process.env.REACT_APP_API;
 
-  const checkUserExists = async () => {
-    try {
-      const response = await fetch(`${API_URL}/check-user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-      const data = await response.json();
-      return data.exists;
-    } catch (error) {
-      console.error(`Failed to check user: ${error}`);
-      setAlertMessage(`Failed to check user: ${error}`);
-      setAlertColor("fail");
-      setShowAlert(true);
-      setLoading(false);
-      return false;
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -65,22 +44,11 @@ const Auth = () => {
       return;
     }
 
-    if (signUp) {
-      const userExists = await checkUserExists();
-      if (userExists) {
-        console.error("User already exists");
-        setAlertMessage("User already exists");
-        setAlertColor("fail");
-        setLoading(false);
-        setShowAlert(true);
-        return;
-      }
-    }
-
     const newUserData = {
       email: enteredEmail,
       password: enteredPassword,
     };
+
     try {
       const endpoint = signUp ? `${API_URL}/signup` : `${API_URL}/login`;
       const response = await fetch(endpoint, {
@@ -99,6 +67,11 @@ const Auth = () => {
         navigate("/portfoglio");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
         localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));
+      } else if (signUp && response.status === 409) {
+        console.error("User already exists");
+        setAlertMessage("User already exists");
+        setAlertColor("fail");
+        setShowAlert(true);
       } else {
         console.error("Failed to sign up or log in");
         setAlertMessage(signUp ? "Failed to sign up" : "Failed to log in");

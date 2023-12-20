@@ -5,6 +5,7 @@ const User = require("./models/User");
 const cors = require("cors");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -108,8 +109,17 @@ app.post("/coin/check-coin", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const { email, password } = req.body;
-  const user = new User({ email, password });
+  const saltRounds = 10;
+
   try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already in use" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = new User({ email, hashedPassword });
     await user.save();
 
     const token = createToken(user._id);
@@ -126,41 +136,51 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
+
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
+
+    const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
     const token = createToken(user._id);
     res.json({ token, email, _id: user._id });
-    console.log("user successfully logged in");
+    console.log("User successfully logged in");
   } catch (error) {
     console.error(`Failed to log in user: ${error}`);
     res.status(500).json({ message: "Failed to log in user" });
   }
 });
 
-app.post("/check-user", async (req, res) => {
-  const { email } = req.body;
+// app.post("/check-user", async (req, res) => {
+//   const { email } = req.body;
+//   console.log("email", email);
 
-  try {
-    const existingUser = await User.findOne({
-      $or: [{ email }],
-    });
+//   try {
+//     const existingUser = await User.findOne({
+//       $or: [{ email }],
+//     });
+//     console.log("existingUser", existingUser);
 
-    if (existingUser) {
-      return res.json({ exists: true });
-    }
+//     if (existingUser) {
+//       return res.json({ exists: true });
+//     }
 
-    res.json({ exists: false });
-  } catch (error) {
-    console.error(`Failed to check user: ${error}`);
-    res.status(500).json({ message: "Failed to check user" });
-  }
-});
+//     res.json({ exists: false });
+//   } catch (error) {
+//     console.error(`Failed to check user: ${error}`);
+//     res.status(500).json({ message: "Failed to check user" });
+//   }
+// });
 
-app.get("/users", async (req, res) => {
-  const users = await User.find();
-  res.json(users);
-});
+// app.get("/users", async (req, res) => {
+//   const users = await User.find();
+//   res.json(users);
+// });
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);

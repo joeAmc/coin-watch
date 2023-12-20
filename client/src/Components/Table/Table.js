@@ -15,6 +15,7 @@ import "./Table.css";
 const Table = () => {
   const API_URL = process.env.REACT_APP_API;
   const [coins, setCoins] = useState([]);
+  const [hasCoins, setHasCoins] = useState(false);
   const [rowModesModel, setRowModesModel] = useState({});
   const [newAmount, setNewAmount] = useState("");
   const { showModal, setShowModal } = useContext(AuthContext);
@@ -35,11 +36,19 @@ const Table = () => {
     fetch(`${API_URL}/coins/${userId}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log("data: ", data);
         setCoins(data);
-        const newInitialRows = data.map((coin) => {
-          return createData(coin._id, coin.name, coin.ticker, coin.amount);
-        });
-        setInitialRows(newInitialRows);
+        console.log("coins: ", coins);
+
+        if (!data.length) {
+          setHasCoins(false);
+        } else {
+          setHasCoins(true);
+          const newInitialRows = data.map((coin) => {
+            return createData(coin._id, coin.name, coin.ticker, coin.amount);
+          });
+          setInitialRows(newInitialRows);
+        }
       })
       .catch((err) => console.log("Error: ", err));
   };
@@ -232,48 +241,48 @@ const Table = () => {
 
   return (
     <div className="table-container">
-      <ThemeProvider theme={myTheme}>
-        <div
-          className="crpt-table"
-          style={{
-            // position: "absolute",
-            // top: "45%",
-            // left: "50%",
-            width: "90%",
-            maxWidth: "659px",
-            // transform: "translate(-50%, -50%)",
-            boxShadow: "0 0 25px rgba(122, 215, 138, 0.35)",
-            backgroundColor: "#131922",
-          }}
-        >
-          <DataGrid
-            initialState={{
-              columns: {
-                columnVisibilityModel: {
-                  id: false,
-                },
-              },
+      {!hasCoins ? (
+        <h3 className="no-coins">Add some coins to edit</h3>
+      ) : (
+        <ThemeProvider theme={myTheme}>
+          <div
+            className="crpt-table"
+            style={{
+              width: "90%",
+              maxWidth: "659px",
+              boxShadow: "0 0 25px rgba(122, 215, 138, 0.35)",
+              backgroundColor: "#131922",
             }}
-            rows={initialRows}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            processRowUpdate={processRowUpdate}
-            sx={{ ...gridStyles }}
-            disableColumnMenu
-            hideFooter
-          />
-        </div>
-        {showModal && (
-          <Modal
-            name={name}
-            amount={newAmount}
-            onConfirm={handleModalSubmit}
-            action={action}
-          />
-        )}
-      </ThemeProvider>
+          >
+            <DataGrid
+              initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    id: false,
+                  },
+                },
+              }}
+              rows={initialRows}
+              columns={columns}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              processRowUpdate={processRowUpdate}
+              sx={{ ...gridStyles }}
+              disableColumnMenu
+              hideFooter
+            />
+          </div>
+          {showModal && (
+            <Modal
+              name={name}
+              amount={newAmount}
+              onConfirm={handleModalSubmit}
+              action={action}
+            />
+          )}
+        </ThemeProvider>
+      )}
     </div>
   );
 };
