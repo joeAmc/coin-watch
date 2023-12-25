@@ -100,8 +100,6 @@ app.post("/coin/check-coin", async (req, res) => {
       user_id: userID,
     });
 
-    console.log("existingCrypto", existingCrypto);
-
     if (existingCrypto) {
       return res.json({ exists: true });
     }
