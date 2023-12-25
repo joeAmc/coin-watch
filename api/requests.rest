@@ -8,10 +8,10 @@ POST http://localhost:4000/coin/new
 Content-Type: application/json
 
 {
-    "ticker": "QNT",
+    "ticker": "BTC",
     "amount": 200,
-    "name": "Quant",
-    "user_id": "65285e63aa3062a5429f4956"
+    "name": "bitcoin",
+    "user_id": "6584ad4fc547e49744eb7729"
 }
 
 ###

@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { ObjectId } = require("mongoose").Types;
 const Coin = require("./models/Coin");
 const User = require("./models/User");
 const cors = require("cors");
@@ -89,12 +90,17 @@ app.put("/coin/update/:coinId", async (req, res) => {
 });
 
 app.post("/coin/check-coin", async (req, res) => {
-  const { name } = req.body;
+  const { name, user_id } = req.body;
 
   try {
+    const userID = new ObjectId(user_id);
+
     const existingCrypto = await Coin.findOne({
-      $or: [{ name }],
+      name,
+      user_id: userID,
     });
+
+    console.log("existingCrypto", existingCrypto);
 
     if (existingCrypto) {
       return res.json({ exists: true });

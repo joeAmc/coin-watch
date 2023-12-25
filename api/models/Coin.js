@@ -4,7 +4,7 @@ const coinSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   ticker: {
     type: String,
@@ -15,7 +15,7 @@ const coinSchema = new mongoose.Schema({
     ref: "User",
     required: true,
     validate: {
-      validator: async function(userId) {
+      validator: async function (userId) {
         const user = await mongoose.model("User").findById(userId);
         return !!user;
       },
@@ -28,6 +28,7 @@ const coinSchema = new mongoose.Schema({
   },
 });
 
+coinSchema.index({ name: 1, user_id: 1 }, { unique: true });
 const Coin = mongoose.model("Coin", coinSchema);
 
 module.exports = Coin;

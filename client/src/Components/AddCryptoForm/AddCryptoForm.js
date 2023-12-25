@@ -101,7 +101,7 @@ const AddCryptoForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, user_id: storedUserID }),
       });
       const data = await response.json();
       return data.exists;
@@ -127,6 +127,7 @@ const AddCryptoForm = () => {
     };
 
     const cryptoExists = await checkCryptoExists();
+    console.log("cryptoExists", cryptoExists);
     if (cryptoExists) {
       console.error("User already has added this crypto");
       setAlertMessage(`${name} already added`);

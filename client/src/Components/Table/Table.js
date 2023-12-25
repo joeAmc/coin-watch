@@ -36,9 +36,7 @@ const Table = () => {
     fetch(`${API_URL}/coins/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("data: ", data);
         setCoins(data);
-        console.log("coins: ", coins);
 
         if (!data.length) {
           setHasCoins(false);
