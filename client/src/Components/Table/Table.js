@@ -11,6 +11,7 @@ import Modal from "../Modal/Modal";
 import { gridStyles } from "./gridStyles";
 import * as R from "ramda";
 import "./Table.css";
+import { RotatingLines } from "react-loader-spinner";
 
 const Table = () => {
   const API_URL = process.env.REACT_APP_API;
@@ -23,6 +24,7 @@ const Table = () => {
   const [name, setName] = useState("");
   const [action, setAction] = useState("");
   const [initialRows, setInitialRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let storedUserID = localStorage.getItem("pie-bit-user-id");
@@ -40,12 +42,14 @@ const Table = () => {
 
         if (!data.length) {
           setHasCoins(false);
+          setLoading(false);
         } else {
           setHasCoins(true);
           const newInitialRows = data.map((coin) => {
             return createData(coin._id, coin.name, coin.ticker, coin.amount);
           });
           setInitialRows(newInitialRows);
+          setLoading(false);
         }
       })
       .catch((err) => console.log("Error: ", err));
@@ -239,7 +243,21 @@ const Table = () => {
 
   return (
     <div className="table-container">
-      {!hasCoins ? (
+      {loading && (
+        <>
+          <div className="loader" data-testid="spinner">
+            <RotatingLines
+              strokeColor="var(--loader-color)"
+              strokeWidth="5"
+              animationDuration="1.3"
+              width="96"
+              visible={true}
+            />
+          </div>
+          <div className="alert-backdrop"></div>
+        </>
+      )}
+      {!hasCoins && !loading ? (
         <h3 className="no-coins">Add some coins to edit</h3>
       ) : (
         <ThemeProvider theme={myTheme}>

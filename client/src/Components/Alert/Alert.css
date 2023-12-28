@@ -1,13 +1,12 @@
 .alert {
   padding: 12px;
-  position: absolute;
-  left: 50%;
+  margin-bottom: 18px;
   width: 90%;
   max-width: 659px;
-  transform: translate(-50%, -50%);
+  top: 13vh;
+  position: absolute;
   z-index: 3;
   border: none;
-  top: 7.5rem;
   border-radius: 8px;
   background-image: linear-gradient(to bottom, var(--dark-alt), rgb(39 40 59));
 }

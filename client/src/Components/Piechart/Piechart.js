@@ -3,11 +3,15 @@ import { useState, useEffect } from "react";
 import "./Piechart.css";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import * as R from "ramda";
+import { RotatingLines } from "react-loader-spinner";
 
 const Piechart = () => {
   const [data, setData] = useState([]);
   const [coins, setCoins] = useState([]);
   const [userCoinAmounts, setUserCoinAmounts] = useState([]);
+  const [hasCoins, setHasCoins] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API;
 
   useEffect(() => {
@@ -22,12 +26,20 @@ const Piechart = () => {
     fetch(`${API_URL}/coins/${userid}`)
       .then((res) => res.json())
       .then((data) => {
-        const userCoins = data.map((coin) => coin.name.toLowerCase());
-        setCoins(userCoins);
-        const coinAmounts = data.map((coin) => ({
-          [coin.name.toLowerCase()]: coin.amount,
-        }));
-        setUserCoinAmounts(coinAmounts);
+        if (!data.length) {
+          setHasCoins(false);
+          setLoading(false);
+        } else {
+          setHasCoins(true);
+          const userCoins = data.map((coin) => coin.name.toLowerCase());
+          setCoins(userCoins);
+          setLoading(false);
+
+          const coinAmounts = data.map((coin) => ({
+            [coin.name.toLowerCase()]: coin.amount,
+          }));
+          setUserCoinAmounts(coinAmounts);
+        }
       })
       .catch((err) => console.log("Error: ", err));
   };
@@ -110,6 +122,20 @@ const Piechart = () => {
 
   return (
     <>
+      {loading && (
+        <>
+          <div className="loader" data-testid="spinner">
+            <RotatingLines
+              strokeColor="var(--loader-color)"
+              strokeWidth="5"
+              animationDuration="1.3"
+              width="96"
+              visible={true}
+            />
+          </div>
+          <div className="alert-backdrop"></div>
+        </>
+      )}
       <div
         className="piechart-container"
         style={{
@@ -119,33 +145,41 @@ const Piechart = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <PieChart
-          className="custom-pie-chart"
-          series={[
-            {
-              arcLabel: getArcLabel,
-              arcLabelMinAngle: 30,
-              paddingAngle: 3,
-              innerRadius: 8,
-              data,
-              highlightScope: { faded: "global", highlighted: "item" },
-              faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
-              valueFormatter: customTooltipFormatter,
-            },
-          ]}
-          sx={{
-            [`& .${pieArcLabelClasses.root}`]: {
-              fill: "white",
-              fontWeight: "regular",
-              fontSize: 12,
-              fontFamily: "'Fira Sans', sans-serif",
-            },
-            "& .MuiPieArc-root": {
-              stroke: "white",
-            },
-          }}
-          {...sizing}
-        />
+        {!hasCoins && !loading ? (
+          <h3 className="no-coins">Add some coins</h3>
+        ) : (
+          <PieChart
+            className="custom-pie-chart"
+            series={[
+              {
+                arcLabel: getArcLabel,
+                arcLabelMinAngle: 30,
+                paddingAngle: 3,
+                innerRadius: 8,
+                data,
+                highlightScope: { faded: "global", highlighted: "item" },
+                faded: {
+                  innerRadius: 30,
+                  additionalRadius: -30,
+                  color: "gray",
+                },
+                valueFormatter: customTooltipFormatter,
+              },
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: "white",
+                fontWeight: "regular",
+                fontSize: 12,
+                fontFamily: "'Fira Sans', sans-serif",
+              },
+              "& .MuiPieArc-root": {
+                stroke: "white",
+              },
+            }}
+            {...sizing}
+          />
+        )}
       </div>
       <div className="total-value">
         <h4>Total Value: {currencyFormatter.format(totalPortfolioValue)}</h4>

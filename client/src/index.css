@@ -131,12 +131,8 @@ form {
   background-color: var(--dark-alt);
   padding: 22px;
   box-shadow: var(--box-shadow);
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 90%;
   max-width: 659px;
-  transform: translate(-50%, -50%);
 }
 
 .header-container {
