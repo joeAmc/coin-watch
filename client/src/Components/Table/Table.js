@@ -241,6 +241,9 @@ const Table = () => {
     },
   ];
 
+  console.log("hasCoins: ", hasCoins);
+  console.log("loading: ", loading);
+
   return (
     <div className="table-container">
       {loading && (

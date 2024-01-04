@@ -31,6 +31,9 @@ describe("Sign out form", () => {
     await waitFor(() => {
       expect(removeItemMock).toHaveBeenCalledWith("pie-bit-user");
     });
+    expect(localStorage.getItem("pie-bit-user")).not.toBe(
+      "6550aef4bff6ff1f42769fbd"
+    );
   });
 
   it("should maintain pie-bit-user value on 'Go back' button click", () => {

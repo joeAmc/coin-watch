@@ -1,54 +1,51 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import AddCryptoForm from "../AddCryptoForm";
+import "whatwg-fetch";
+import { setupServer } from "msw/node";
+import { handlers } from "../../../Mocks/handlers";
+import userEvent from "@testing-library/user-event";
 
 describe("AddCryptoForm Component", () => {
-  // beforeAll(() => {
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       ok: true,
-  //       json: () =>
-  //         Promise.resolve({ data: [{ id: "bitcoin", name: "Bitcoin" }] }),
-  //     })
-  //   );
-  // });
+  const server = setupServer(...handlers);
 
-  // afterAll(() => {
-  //   global.fetch.mockClear();
-  //   delete global.fetch;
-  // });
+  beforeAll(() => {
+    server.listen();
+    process.env.REACT_APP_API = "http://localhost:4000";
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
 
   it("renders AddCryptoForm correctly", async () => {
     render(<AddCryptoForm />);
     expect(screen.getByText("Crypto Name")).toBeInTheDocument();
     expect(screen.getByLabelText("Amount")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Crypto" })
+    ).toBeInTheDocument();
   });
 
-  // it("handles input changes correctly", () => {
-  //   render(<AddCryptoForm />);
-  //   const cryptoNameInput = screen.getByLabelText("Crypto Name");
-  //   const amountInput = screen.getByLabelText("Amount");
+  it("selects a crypto", async () => {
+    render(<AddCryptoForm />);
 
-  //   fireEvent.change(cryptoNameInput, { target: { value: "bitcoin" } });
-  //   fireEvent.change(amountInput, { target: { value: "10" } });
+    expect(screen.getByText("Crypto Name")).toBeInTheDocument();
 
-  //   expect(cryptoNameInput).toHaveValue("bitcoin");
-  //   expect(amountInput).toHaveValue("10");
-  // });
+    const amountField = screen.getByLabelText("Amount");
+    expect(amountField).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add Crypto" })
+    ).toBeInTheDocument();
 
-  // it("submits the form with correct data", async () => {
-  //   render(<AddCryptoForm />);
-  //   const addButton = screen.getByRole("button", { name: "Add Crypto" });
+    userEvent.type(amountField, "100");
 
-  //   fireEvent.click(addButton);
-
-  //   await waitFor(() => {
-  //     expect(global.fetch).toHaveBeenCalled();
-  //     expect(global.fetch).toHaveBeenCalledWith(
-  //       "https://api.coincap.io/v2/assets/bitcoin"
-  //     );
-  //   });
-  // });
-
-  // You can add more tests here for modal rendering and interactions if needed
+    await waitFor(() => {
+      expect(amountField).toHaveValue("100");
+    });
+  });
 });

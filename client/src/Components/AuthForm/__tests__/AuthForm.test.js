@@ -47,7 +47,7 @@ describe("Auth form", () => {
     fireEvent.click(signUpLink);
   });
 
-  it("submits the form with valid email and password", async () => {
+  it("renders an alert when password invalid", async () => {
     render(
       <BrowserRouter>
         <AuthForm />
@@ -56,13 +56,41 @@ describe("Auth form", () => {
 
     const emailInput = screen.getByLabelText("Email");
     const passwordInput = screen.getByLabelText("Password");
-    const logInButton = screen.getByText("Log in");
+    const signUpButton = screen.getByRole("button", { name: "Sign up" });
 
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password123" } });
+    fireEvent.change(passwordInput, { target: { value: "abc" } });
 
-    fireEvent.click(logInButton);
+    fireEvent.click(signUpButton);
+
+    await expect(
+      screen.getByText("Password must be at least 8 characters long")
+    ).toBeInTheDocument();
   });
 
-  // Test other scenarios such as sign-up mode, error handling, API requests, etc.
+  it("renders an alert when email is invalid", async () => {
+    render(
+      <BrowserRouter>
+        <AuthForm />
+      </BrowserRouter>
+    );
+
+    const emailInput = screen.getByLabelText("Email");
+    const passwordInput = screen.getByLabelText("Password");
+    const signUpButton = screen.getByRole("button", { name: "Sign up" });
+
+    fireEvent.change(emailInput, { target: { value: "joe+@dd.c" } });
+    fireEvent.change(passwordInput, { target: { value: "abc1234" } });
+
+    fireEvent.click(signUpButton);
+
+    // await waitFor(() => {
+    //   expect(
+    //     screen.getByText("Please enter a valid Email")
+    //   ).toBeInTheDocument();
+    // });
+    await expect(
+      screen.getByText("Please enter a valid Email")
+    ).toBeInTheDocument();
+  });
 });

@@ -6,6 +6,7 @@ import { setupServer } from "msw/node";
 import { handlers } from "../../../Mocks/handlers";
 import userEvent from "@testing-library/user-event";
 import { AuthContext } from "../../../AuthContext";
+import { rest } from "msw";
 
 const server = setupServer(...handlers);
 
@@ -46,7 +47,7 @@ Object.defineProperty(window, "localStorage", {
 localStorageMock.setItem("pie-bit-user-id", "6550aef4bff6ff1f42769fbd");
 
 describe("crypto table", () => {
-  it("it shows the users crypto name and amount", async () => {
+  it("shows the users crypto name and amount", async () => {
     render(<Table />);
 
     const bnb = await screen.findByText("binance-coin");
@@ -61,7 +62,7 @@ describe("crypto table", () => {
     expect(bnbAmount).toBeInTheDocument();
     expect(etcAmount).toBeInTheDocument();
   });
-  it("it can update an amount", async () => {
+  it("can update an amount", async () => {
     render(<Table />);
 
     // const editButton = await screen.findByRole("button", { role: "menuitem" });
@@ -85,7 +86,7 @@ describe("crypto table", () => {
       expect(screen.getByDisplayValue("500")).toBeInTheDocument();
     });
   });
-  it("it can delete a cry", async () => {
+  it("can delete a crypto", async () => {
     const contextValue = {
       setShowModal: jest.fn(),
       showModal: true,
@@ -96,6 +97,9 @@ describe("crypto table", () => {
         <Table />
       </AuthContext.Provider>
     );
+
+    const etc = await screen.findByText("Ethereum Classic");
+    expect(etc).toBeInTheDocument();
 
     const deleteButtons = await screen.findAllByRole("menuitem", {
       name: "Delete",
@@ -114,6 +118,23 @@ describe("crypto table", () => {
 
     await waitFor(() => {
       expect(contextValue.setShowModal).toHaveBeenCalledWith(false);
+    });
+    expect(etc).not.toBeInTheDocument();
+  });
+
+  it("shows add coins copy when user has no coins", async () => {
+    server.use(
+      rest.get(
+        "http://localhost:4000/coins/6550aef4bff6ff1f42769fbd",
+        (req, res, ctx) => {
+          return res(ctx.json([]));
+        }
+      )
+    );
+    render(<Table />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Add some coins to edit")).toBeInTheDocument();
     });
   });
 });
