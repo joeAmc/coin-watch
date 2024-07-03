@@ -9,7 +9,6 @@ import UpdateCrypto from "./Pages/UpdateCrypto";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
@@ -24,11 +23,9 @@ function App() {
       <AuthContext.Provider
         value={{
           loggedIn,
-          showModal,
           userId,
           setUserId,
           setLoggedIn,
-          setShowModal,
         }}
       >
         <Routes>
