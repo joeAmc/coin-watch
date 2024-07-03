@@ -1,13 +1,13 @@
 import React from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../AuthContext";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../state/modal/modalSlice";
 import "./Modal.css";
 
 const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
-  const { showModal, setShowModal } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const cancelModalHandler = () => {
-    setShowModal(false);
+    dispatch(closeModal());
   };
 
   const addModalHandler = () => {
@@ -16,7 +16,6 @@ const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
 
   return (
     <>
-      {/* <div className={`modal ${backgroundColor}`}> */}
       <div className={`modal success`}>
         <div className="modal-info">
           <p>
@@ -31,9 +30,6 @@ const Modal = ({ amount, name, backgroundColor, onConfirm, action }) => {
           </button>
           <button onClick={addModalHandler}>Confirm</button>
         </div>
-        {/* <div className="modal-alert" onClick={closeAlertHandler}>
-          <RxCrossCircled />
-        </div> */}
       </div>
       <div className="modal-backdrop"></div>
     </>

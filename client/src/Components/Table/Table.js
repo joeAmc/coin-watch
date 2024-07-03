@@ -1,12 +1,13 @@
 import React from "react";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { GridRowModes, DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { AuthContext } from "../../AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { openModal, closeModal } from "../../state/modal/modalSlice";
 import Modal from "../Modal/Modal";
 import { gridStyles } from "./gridStyles";
 import * as R from "ramda";
@@ -19,7 +20,8 @@ const Table = () => {
   const [hasCoins, setHasCoins] = useState(false);
   const [rowModesModel, setRowModesModel] = useState({});
   const [newAmount, setNewAmount] = useState("");
-  const { showModal, setShowModal } = useContext(AuthContext);
+  const modal = useSelector((state) => state.modal.showModal);
+  const dispatch = useDispatch();
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [action, setAction] = useState("");
@@ -95,17 +97,17 @@ const Table = () => {
   const handleModalSubmit = async () => {
     if (action === "delete") {
       await handleDeleteSubmit(id);
-      setShowModal(false);
+      dispatch(closeModal());
     } else if (action === "update") {
       await handleUpdateSubmit();
-      setShowModal(false);
+      dispatch(closeModal());
     }
   };
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
     setNewAmount(updatedRow.amount);
-    setShowModal(true);
+    dispatch(openModal());
     setName(updatedRow.name);
     setId(updatedRow.id);
     return updatedRow;
@@ -140,7 +142,7 @@ const Table = () => {
       const { name, amount } = coinToDelete;
       setName(name);
       setNewAmount(amount);
-      setShowModal(true);
+      dispatch(openModal());
       setAction("delete");
       setId(id);
     }
@@ -241,9 +243,6 @@ const Table = () => {
     },
   ];
 
-  console.log("hasCoins: ", hasCoins);
-  console.log("loading: ", loading);
-
   return (
     <div className="table-container">
       {loading && (
@@ -292,7 +291,7 @@ const Table = () => {
               hideFooter
             />
           </div>
-          {showModal && (
+          {modal && (
             <Modal
               name={name}
               amount={newAmount}

@@ -8,3 +8,4 @@ export const AuthContext = createContext({
   setLoggedIn: () => {},
   setShowModal: () => {},
 });
+// Compare this snippet from client/src/App.js:

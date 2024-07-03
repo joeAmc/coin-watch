@@ -1,5 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../AuthContext";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { openModal, closeModal } from "../../state/modal/modalSlice";
 import Modal from "../Modal/Modal";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,7 +17,9 @@ const AddCryptoForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [coinData, setCoinData] = useState([]);
-  const { showModal, setShowModal } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const modal = useSelector((state) => state.modal.showModal);
   const [showAlert, setShowAlert] = useState(false);
   const [action, setAction] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -26,6 +29,9 @@ const AddCryptoForm = () => {
 
   let storedUserID = localStorage.getItem("pie-bit-user-id");
   storedUserID = storedUserID ? R.replace(/^"|"$/g, "", storedUserID) : null;
+
+  console.log("stste", state);
+  console.log("showModalstate", modal);
 
   useEffect(() => {
     const fetchCoinIds = async () => {
@@ -79,7 +85,7 @@ const AddCryptoForm = () => {
 
       const result = await response.json();
       setTicker(result.data.symbol);
-      setShowModal(true);
+      dispatch(openModal());
       setAction("add");
     } catch (error) {
       console.error(`Error fetching data for ${name}:`, error);
@@ -109,7 +115,6 @@ const AddCryptoForm = () => {
       console.error(`Failed to check crypto: ${error}`);
       setAlertMessage(`Failed to check crypto: ${error}`);
       setAlertColor("fail");
-      // setSuccess(false);
       setShowAlert(true);
       setLoading(false);
       return false;
@@ -165,13 +170,14 @@ const AddCryptoForm = () => {
 
   const handleConfirmModal = async () => {
     await handleSubmit();
-    setShowModal(false);
+    dispatch(closeModal());
   };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
 
+  console.log("modal", modal);
   return (
     <div className="new-crypto-form-container">
       <form onSubmit={fetchTicker}>
@@ -232,7 +238,7 @@ const AddCryptoForm = () => {
         <br />
         <button>Add Crypto</button>
       </form>
-      {showModal && (
+      {modal && (
         <Modal
           name={name}
           amount={amount}
