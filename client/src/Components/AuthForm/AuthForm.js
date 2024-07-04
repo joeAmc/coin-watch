@@ -1,9 +1,11 @@
 import React from "react";
-import { useState, useContext, useRef } from "react";
+import { useState, useRef } from "react";
 import "./AuthForm.css";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
-import { AuthContext } from "../../AuthContext";
+import { useDispatch } from "react-redux";
+import { setLoggedIn } from "../../state/authStatus/authStatusSlice";
+import { setUserId } from "../../state/userId/userIdSlice";
 import Alert from "../Alert/Alert";
 import validator from "validator";
 
@@ -15,9 +17,9 @@ const Auth = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertColor, setAlertColor] = useState("");
-  const { setLoggedIn, setUserId } = useContext(AuthContext);
   const email = useRef();
   const password = useRef();
+  const dispatch = useDispatch();
 
   const API_URL = process.env.REACT_APP_API;
 
@@ -62,8 +64,8 @@ const Auth = () => {
       const json = await response.json();
 
       if (response.ok) {
-        setLoggedIn(true);
-        setUserId(json._id);
+        dispatch(setLoggedIn());
+        dispatch(setUserId(json._id));
         navigate("/portfoglio");
         localStorage.setItem("pie-bit-user", JSON.stringify(json));
         localStorage.setItem("pie-bit-user-id", JSON.stringify(json._id));

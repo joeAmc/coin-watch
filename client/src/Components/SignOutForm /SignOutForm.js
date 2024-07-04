@@ -1,16 +1,16 @@
 import React from "react";
-import { useState, useContext } from "react";
 import "./SignOutForm.css";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthContext";
+import { useDispatch } from "react-redux";
+import { setLoggedOut } from "../../state/authStatus/authStatusSlice";
 
 const SignOutForm = () => {
   const navigate = useNavigate();
-  const { setLoggedIn } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const signOutHandler = () => {
     localStorage.removeItem("pie-bit-user");
-    setLoggedIn(false);
+    dispatch(setLoggedOut());
   };
 
   const cancelSignOutHandler = () => {

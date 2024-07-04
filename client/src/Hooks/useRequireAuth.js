@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthContext";
+import { useSelector } from "react-redux";
 
 const useRequireAuth = () => {
-  const { loggedIn } = useContext(AuthContext);
+  const loggedIn = useSelector((state) => state.authStatus.isLoggedIn);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
